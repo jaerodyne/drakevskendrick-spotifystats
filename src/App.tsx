@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { BarChart } from '@mui/x-charts';
 
 import { 
@@ -102,65 +102,63 @@ function App() {
     return artists.map((artist) => artist.name)
   }
 
+  const fetchPlaylistTracks = useCallback(async () => {
+    try {
+      const result = await fetch(playlistTracksUrl, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer  ${JSON.parse(token)['access_token']}`
+        }
+      });
+
+      const playlistData = await result.json();
+
+      // Remove 'The Heart Part 6' track since it's not officially released under Drake on Spotify
+      playlistData['items'].pop();
+      setPlaylistTracks(playlistData['items']);
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
+
+  const getAlbumTracks = useCallback(async () => {
+    const tracks: Array<any> = []
+
+    try {
+      trackInfo.map((album, index) => {
+        // TODO: Run in production only, API has rate limits
+
+        // const responseData = await fetch(albumPlayCountBaseUrl + album.album_id)
+        // const result = await responseData.json();
+
+        //     const track = result['data']['discs'][0]['tracks'].find((trackData) => {
+        //       return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === album.track_id;
+        //     })
+
+        //     console.log(track);
+
+        //     tracks.push(track);
+        //   })
+        const data = dummyData[index];
+
+        // Check track against Spotify API to make sure it's the right one
+        const track = data['data']['discs'][0]['tracks'].find((trackData) => {
+          return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === album.track_id;
+        })
+
+        tracks.push(track);
+      })
+
+      setTracksData(tracks);
+    } catch(error) {
+      console.log(error);
+    }
+  }, [])
+
+
   useEffect(() => {
     if (!token) {
       fetchToken();
-    }
-
-    const fetchPlaylistTracks = async () => {
-      try {
-        const result = await fetch(playlistTracksUrl, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer  ${JSON.parse(token)['access_token']}`
-          }
-        });
-
-        const playlistData = await result.json();
-
-        // Remove 'The Heart Part 6' track since it's not officially released under Drake on Spotify
-        playlistData['items'].pop();
-        setPlaylistTracks(playlistData['items']);
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    const getAlbumTracks = () => {
-      const tracks = []
-
-      try {
-        trackInfo.map((album, index) => {
-          // TODO: Run in production only, API has rate limits
-
-          // fetch(albumPlayCountBaseUrl + album.album_id)
-          //   .then((responseData) => {
-          //     const result = responseData.json();
-          //     return result;
-          //   })
-          //   .then((data) => {
-          //     const track = data['data']['discs'][0]['tracks'].find((trackData) => {
-          //       return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === album.track_id;
-          //     })
-
-          //     console.log(track);
-
-          //     tracks.push(track);
-          //   })
-          const data = dummyData[index];
-
-          // Check track against Spotify API to make sure it's the right one
-          const track = data['data']['discs'][0]['tracks'].find((trackData) => {
-            return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === album.track_id;
-          })
-
-          tracks.push(track);
-        })
-
-        setTracksData(tracks);
-      } catch(error) {
-        console.log(error);
-      }
     }
 
     const formatTrackData = () => {
@@ -188,11 +186,10 @@ function App() {
     fetchPlaylistTracks();
     getAlbumTracks();
     setTimeout(() => {
-      console.log(formattedTracks.map((track) => track.name))
       formatTrackData()
     }, 3000);
 
-  }, [token]);
+  }, []);
 
   if (isLoading) {
     return <h2>Loading...</h2>
@@ -200,6 +197,7 @@ function App() {
 
   return (
     <>
+      <h1>if these bars could talk</h1>
       <BarChart
         xAxis={[
           {
@@ -213,7 +211,7 @@ function App() {
             data: formattedTracks.length ? formattedTracks.map((track) => track.playcount) : [],
           },
         ]}
-        width={500}
+        width={600}
         height={300}
       />
     </>

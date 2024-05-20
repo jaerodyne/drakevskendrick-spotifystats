@@ -7,7 +7,8 @@ import {
   playlistTracksUrl,
   albumPlayCountBaseUrl,
   trackInfo,
-  dummyData
+  dummyData,
+  FormattedTrackData
 } from '../data';
 import './App.css'
 
@@ -16,6 +17,7 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [tracksData, setTracksData] = useState([]);
+  const [formattedTracks, setFormattedTracks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchToken = async () => {
@@ -92,7 +94,8 @@ function App() {
       return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === track_id
     });
 
-    return new Intl.NumberFormat().format(track.playcount) || "Not found";
+    return track.playcount;
+    // return new Intl.NumberFormat().format(track.playcount) || "Not found";
   }
 
   const getArtistNames = (artists: Array<object>) => {
@@ -158,12 +161,36 @@ function App() {
       } catch(error) {
         console.log(error);
       }
+    }
 
+    const formatTrackData = () => {
+      const data: Array<FormattedTrackData> = [];
+
+      playlistTracks.map((playlistTrack) => {
+        const { track: { id, name, artists, popularity } } = playlistTrack;
+
+        const track: FormattedTrackData = {
+          id,
+          name,
+          artist: getArtistNames(artists),
+          popularity,
+          playcount: getTrackPlayCount(id)
+        }
+        
+        data.push(track);
+      })
+
+      setFormattedTracks(data);
+      
       setIsLoading(false);
     }
-    
+
     fetchPlaylistTracks();
     getAlbumTracks();
+    setTimeout(() => {
+      console.log(formattedTracks.map((track) => track.name))
+      formatTrackData()
+    }, 3000);
 
   }, [token]);
 
@@ -173,18 +200,22 @@ function App() {
 
   return (
     <>
-      { playlistTracks.map((playlistTrack) => {
-          const { track: { id, name, artists } } = playlistTrack;
-
-          return (
-            <div key={id}>
-              <h3>{name}</h3>
-              <h4>{getArtistNames(artists)}</h4>
-              <h5>play count: {getTrackPlayCount(id)}</h5>
-            </div>
-          )
-        })
-      }
+      <BarChart
+        xAxis={[
+          {
+            id: 'beefSongs',
+            data: formattedTracks.length ? formattedTracks.map((track) => track.name) : [],
+            scaleType: 'band',
+          },
+        ]}
+        series={[
+          {
+            data: formattedTracks.length ? formattedTracks.map((track) => track.playcount) : [],
+          },
+        ]}
+        width={500}
+        height={300}
+      />
     </>
   )
 }

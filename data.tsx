@@ -809,3 +809,11 @@ export const dummyData: Array<PlaycountAPIData> = [
     }
   },
 ]
+
+export interface FormattedTrackData {
+  id: number;
+  name: string;
+  artist: Array<string>
+  popularity: number;
+  playcount: string;
+}

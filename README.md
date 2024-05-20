@@ -1,30 +1,15 @@
-# React + TypeScript + Vite
+# A data visualization of the Drake-Kendrick beef 🥩
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Still WIP, experimenting with the [MUI X Charts Library](https://mui.com/x/react-charts/getting-started/). 
 
-Currently, two official plugins are available:
+Makes use of the public API mentioned in [sp-playcount-librespot](https://github.com/entriphy/sp-playcount-librespot?tab=readme-ov-file) repo, which was created for educational purposes only.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The Spotify API does not publicize playcounts for whatever reason and so we have to pull playcount data from that API to compare against.
 
-## Expanding the ESLint configuration
+Also missing The Heart Part 6 and Taylor Made Freestyle because they're not hosted by Drake on Spotify.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+# Installation
 ```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+npm i
+npm run dev
+```

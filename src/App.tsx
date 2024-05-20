@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 
 import './App.css'
-import { clientId, clientSecret } from '../data';
+import { clientId, clientSecret, playlistTracksUrl, albumPlayCountBaseUrl, trackInfo, dummyData } from '../data';
 
 function App() {
-  const [token, setToken] = useState(window.localStorage.getItem("token"));
-  const [artist, setArtist] = useState({});
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+  const [tracksData, setTracksData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchToken = async () => {
     const params = new URLSearchParams();
@@ -14,46 +16,163 @@ function App() {
     params.append("client_secret", clientSecret);
     params.append("grant_type", "client_credentials");
 
-    const result = await fetch("https://accounts.spotify.com/api/token", {
-      method: "POST",
-      headers: {
-        "Authorization": "Basic " + btoa(clientId + ":" + clientSecret),
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: params,
+    try {
+      const result = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+          "Authorization": "Basic " + btoa(clientId + ":" + clientSecret),
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: params,
+      });
+
+      const token = await result.json();
+
+      localStorage.setItem("token", JSON.stringify(token));
+
+      setToken(token);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // TODO: Figure out right client params
+  const refreshToken = async () => {
+    // const artistData = await result.json();
+
+    // if (artistData.hasOwnProperty("error")) {
+    //   if (artistData.error.message === "The access token expired") {
+    //     refreshToken();
+    //   }
+    // }
+
+    // setArtist(artistData);
+
+    const params = new URLSearchParams();
+
+    const currentToken = JSON.parse(token)['access_token'];
+
+    params.append("grant_type", "refresh_token");
+    params.append("refresh_token", currentToken);
+    params.append("client_id", clientId);
+    
+    try {
+      const result = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": `Basic ${currentToken}`
+        },
+        body: params,
+      });
+
+      const token = await result.json();
+
+      console.log(token)
+
+      // localStorage.setItem("token", JSON.stringify(token));
+
+      // setToken(token);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getTrackPlayCount = (track_id: string) => {
+    const track = tracksData.find((trackData) => { 
+      return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === track_id
     });
 
-    const token = await result.json();
-
-    window.localStorage.setItem("token", JSON.stringify(token));
-
-    setToken(token);
+    return new Intl.NumberFormat().format(track.playcount) || "Not found";
   }
 
   useEffect(() => {
-    if (!window.localStorage.getItem("token")) {
+    if (!token) {
       fetchToken();
     }
 
-    const fetchArtist = async () => {
-      console.log(JSON.parse(token)['access_token'])
+    const fetchPlaylistTracks = async () => {
+      try {
+        const result = await fetch(playlistTracksUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer  ${JSON.parse(token)['access_token']}`
+          }
+        });
 
-      const result = await fetch("https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb", {
-        method: "GET", headers: { Authorization: `Bearer  ${JSON.parse(token)['access_token']}` }
-      });
-      const artistData = await result.json();
+        const playlistData = await result.json();
 
-      setArtist(artistData);
+        // Remove 'The Heart Part 6' track since it's not officially released under Drake on Spotify
+        playlistData['items'].pop();
+        setPlaylistTracks(playlistData['items']);
+      } catch (error) {
+        console.log(error)
+      }
     }
 
-    fetchArtist();
-  }, [token, artist]);
- 
+    const getAlbumTracks = () => {
+      const tracks = []
+
+      try {
+        trackInfo.map((album, index) => {
+          // TODO: Run in production only, API has rate limits
+
+          // fetch(albumPlayCountBaseUrl + album.album_id)
+          //   .then((responseData) => {
+          //     const result = responseData.json();
+          //     return result;
+          //   })
+          //   .then((data) => {
+          //     const track = data['data']['discs'][0]['tracks'].find((trackData) => {
+          //       return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === album.track_id;
+          //     })
+
+          //     console.log(track);
+
+          //     tracks.push(track);
+          //   })
+          const data = dummyData[index];
+
+          // Check track against Spotify API to make sure it's the right one
+          const track = data['data']['discs'][0]['tracks'].find((trackData) => {
+            return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === album.track_id;
+          })
+
+          tracks.push(track);
+        })
+
+        setTracksData(tracks);
+      } catch(error) {
+        console.log(error);
+      }
+
+      setIsLoading(false);
+    }
+    
+    fetchPlaylistTracks();
+    getAlbumTracks();
+
+  }, [token]);
+
+  if (isLoading) {
+    return <h2>Loading...</h2>
+  }
+
   return (
     <>
-      <div>
-        <h3>{artist.name}</h3>
-      </div>
+      { playlistTracks.map((playlistTrack) => {
+          console.log(playlistTrack)
+          const { track: { id, album, name, artists } } = playlistTrack;
+
+          return (
+            <div key={id}>
+              <h3>{name}</h3>
+              <h4>{getArtistNames(artists)}</h4>
+              <h5>play count: {getTrackPlayCount(id)}</h5>
+            </div>
+          )
+        })
+      }
     </>
   )
 }

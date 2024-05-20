@@ -1,7 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+import { BarChart } from '@mui/x-charts';
 
+import { 
+  clientId,
+  clientSecret,
+  playlistTracksUrl,
+  albumPlayCountBaseUrl,
+  trackInfo,
+  dummyData
+} from '../data';
 import './App.css'
-import { clientId, clientSecret, playlistTracksUrl, albumPlayCountBaseUrl, trackInfo, dummyData } from '../data';
+
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));

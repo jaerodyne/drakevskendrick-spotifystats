@@ -86,6 +86,10 @@ function App() {
     return new Intl.NumberFormat().format(track.playcount) || "Not found";
   }
 
+  const getArtistNames = (artists: Array<object>) => {
+    return artists.map((artist) => artist.name)
+  }
+
   useEffect(() => {
     if (!token) {
       fetchToken();
@@ -161,8 +165,7 @@ function App() {
   return (
     <>
       { playlistTracks.map((playlistTrack) => {
-          console.log(playlistTrack)
-          const { track: { id, album, name, artists } } = playlistTrack;
+          const { track: { id, name, artists } } = playlistTrack;
 
           return (
             <div key={id}>

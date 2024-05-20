@@ -1,4 +1,5 @@
 # A data visualization of the Drake-Kendrick beef 🥩
+Forever a pop culture moment immortalized in a [Wikipedia article](https://en.wikipedia.org/wiki/Drake%E2%80%93Kendrick_Lamar_feud) and millions of Spotify plays.
 
 Still WIP, experimenting with the [MUI X Charts Library](https://mui.com/x/react-charts/getting-started/). 
 

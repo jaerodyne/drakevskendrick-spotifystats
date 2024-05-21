@@ -5,6 +5,12 @@
   text-align: center;
 }
 
+:root {
+  --max-width: 1120px;
+  --fixed-width: 600px;
+  --fluid-width: 95vw;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -33,10 +39,13 @@
   }
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.container {
+  width: 95vw;
+  margin: 0 auto;
+  max-width: var(--max-width);
+  text-align: center;
+  margin-top: 5rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { BarChart } from '@mui/x-charts';
+import { BarChart, ChartContainer } from '@mui/x-charts';
 
 import { 
   clientId,
@@ -221,26 +221,32 @@ function App() {
     return <h2>Loading...</h2>
   }
 
+  const chartSetting = {
+    xAxis: [
+      {
+        label: 'rainfall (mm)',
+      },
+    ],
+    width: 500,
+    height: 400,
+  };
+
+  const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : 'unknown' } plays`;
+
   return (
-    <>
+    <div className='container'>
       <h1>if these bars could talk</h1>
       <BarChart
-        xAxis={[
-          {
-            id: 'beefSongs',
-            data: formattedTracks.map((track) => track.name),
-            scaleType: 'band',
-          },
-        ]}
-        series={[
-          {
-            data: formattedTracks.map((track) => track.playcount),
-          },
-        ]}
-        width={600}
-        height={600}
+        dataset={formattedTracks}
+        yAxis={[{ scaleType: 'band', dataKey: 'name', colorMap: {
+      type: 'ordinal',
+      colors: ['#ccebc5', '#a8ddb5', '#7bccc4', '#4eb3d3', '#2b8cbe', '#08589e']
+    } }]}
+        series={[{ dataKey: 'playcount', label: 'playcount', valueFormatter }]}
+        layout="horizontal"
+        {...chartSetting}
       />
-    </>
+    </div>
   )
 }
 

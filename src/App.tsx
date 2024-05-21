@@ -233,15 +233,33 @@ function App() {
 
   const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : 'unknown' } plays`;
 
+  const assignColors = (tracks) => {
+    const colors: Array<string> = [];
+
+    tracks.map((track) => {
+      const kendrick = track['artist'].find((artist) => {
+        return artist.toLowerCase().includes('kendrick')
+      });
+
+      kendrick === 'Kendrick Lamar' ? colors.push('#ccebc5') : colors.push('#08589e')
+    });
+
+    return colors;
+  }
+
   return (
     <div className='container'>
       <h1>if these bars could talk</h1>
       <BarChart
         dataset={formattedTracks}
-        yAxis={[{ scaleType: 'band', dataKey: 'name', colorMap: {
-      type: 'ordinal',
-      colors: ['#ccebc5', '#a8ddb5', '#7bccc4', '#4eb3d3', '#2b8cbe', '#08589e']
-    } }]}
+        yAxis={[{
+          scaleType: 'band',
+          dataKey: 'name',
+          colorMap: {
+            type: 'ordinal',
+            colors: assignColors(formattedTracks)
+          }
+        }]}
         series={[{ dataKey: 'playcount', label: 'playcount', valueFormatter }]}
         layout="horizontal"
         {...chartSetting}

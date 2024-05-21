@@ -8,7 +8,8 @@ import {
   albumPlayCountBaseUrl,
   trackInfo,
   dummyData,
-  FormattedTrackData
+  FormattedTrackData,
+  spotifyDummyData,
 } from '../data';
 import './App.css'
 
@@ -89,8 +90,8 @@ function App() {
     }
   }
 
-  const getTrackPlayCount = (track_id: string) => {
-    const track = tracksData.find((trackData) => { 
+  const getTrackPlayCount = (track_id: string, playcountData: Array<object>) => {
+    const track = playcountData.find((trackData) => { 
       return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === track_id
     });
 
@@ -104,25 +105,34 @@ function App() {
 
   const fetchPlaylistTracks = useCallback(async () => {
     try {
-      const result = await fetch(playlistTracksUrl, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer  ${JSON.parse(token)['access_token']}`
-        }
+      // const result = await fetch(playlistTracksUrl, {
+      //   method: "GET",
+      //   headers: {
+      //     Authorization: `Bearer  ${JSON.parse(token)['access_token']}`
+      //   }
+      // });
+
+      // const playlistData = await result.json();
+
+      // // Remove 'The Heart Part 6' track since it's not officially released under Drake on Spotify
+      // playlistData['items'].pop();
+
+      // const data = playlistData['items'];
+      const data = spotifyDummyData['tracks']['items'];
+
+      setPlaylistTracks((currentState) => {
+        const newState = [...currentState, data ]; 
+        return newState;
       });
 
-      const playlistData = await result.json();
-
-      // Remove 'The Heart Part 6' track since it's not officially released under Drake on Spotify
-      playlistData['items'].pop();
-      setPlaylistTracks(playlistData['items']);
+      return data;
     } catch (error) {
       console.log(error)
     }
   }, [])
 
   const getAlbumTracks = useCallback(async () => {
-    const tracks: Array<any> = []
+    const tracks: Array<object> = []
 
     try {
       trackInfo.map((album, index) => {
@@ -149,47 +159,63 @@ function App() {
         tracks.push(track);
       })
 
-      setTracksData(tracks);
+      setTracksData((currentState) => {
+        return [...currentState, ...tracks ]
+      });
+
+      return tracks;
     } catch(error) {
       console.log(error);
     }
   }, [])
 
+  const formatTrackData = (allData) => {
+    const spotifyData = allData[0];
+    const playcountData = allData[1];
+    const data: Array<FormattedTrackData> = [];
+
+    spotifyData.map((playlistTrack) => {
+      const { track: { id, name, artists, popularity } } = playlistTrack;
+
+      const track: FormattedTrackData = {
+        id,
+        name,
+        artist: getArtistNames(artists),
+        popularity,
+        playcount: getTrackPlayCount(id, playcountData)
+      }
+      
+      data.push(track);
+    })
+
+    setFormattedTracks((currentState) => {
+      return [...currentState, ...data]
+    });
+
+    return data;
+  }
 
   useEffect(() => {
     if (!token) {
       fetchToken();
     }
-
-    const formatTrackData = () => {
-      const data: Array<FormattedTrackData> = [];
-
-      playlistTracks.map((playlistTrack) => {
-        const { track: { id, name, artists, popularity } } = playlistTrack;
-
-        const track: FormattedTrackData = {
-          id,
-          name,
-          artist: getArtistNames(artists),
-          popularity,
-          playcount: getTrackPlayCount(id)
-        }
-        
-        data.push(track);
-      })
-
-      setFormattedTracks(data);
-      
+  
+    Promise.all(
+      [
+        fetchPlaylistTracks(), 
+        getAlbumTracks()
+      ]
+    )
+    .then((allData) => {
+      formatTrackData(allData);
+    })
+    .then(() => {
       setIsLoading(false);
-    }
-
-    fetchPlaylistTracks();
-    getAlbumTracks();
-    setTimeout(() => {
-      formatTrackData()
-    }, 3000);
-
-  }, []);
+    })
+    .catch((error) => {
+      console.error(error.message);
+    });
+  }, [token]);
 
   if (isLoading) {
     return <h2>Loading...</h2>
@@ -202,17 +228,17 @@ function App() {
         xAxis={[
           {
             id: 'beefSongs',
-            data: formattedTracks.length ? formattedTracks.map((track) => track.name) : [],
+            data: formattedTracks.map((track) => track.name),
             scaleType: 'band',
           },
         ]}
         series={[
           {
-            data: formattedTracks.length ? formattedTracks.map((track) => track.playcount) : [],
+            data: formattedTracks.map((track) => track.playcount),
           },
         ]}
         width={600}
-        height={300}
+        height={600}
       />
     </>
   )

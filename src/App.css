@@ -49,3 +49,13 @@
   align-items: center;
   gap: 2rem;
 }
+
+.tooltip {
+  padding: 0.75rem;
+}
+
+.img {
+  width: 50%;
+  display: block;
+  object-fit: cover;
+}

@@ -11,7 +11,9 @@ import {
   FormattedTrackData,
   spotifyDummyData,
 } from '../data';
-import './App.css'
+
+import Tooltip from './components/Tooltip';
+import './App.css';
 
 
 function App() {
@@ -224,7 +226,7 @@ function App() {
   const chartSetting = {
     xAxis: [
       {
-        label: 'rainfall (mm)',
+        label: 'Spotify plays',
       },
     ],
     width: 500,
@@ -237,11 +239,11 @@ function App() {
     const colors: Array<string> = [];
 
     tracks.map((track) => {
-      const kendrick = track['artist'].find((artist) => {
-        return artist.toLowerCase().includes('kendrick')
+      const drake = track['artist'].find((artist) => {
+        return artist.toLowerCase().includes('drake')
       });
 
-      kendrick === 'Kendrick Lamar' ? colors.push('#ccebc5') : colors.push('#08589e')
+      drake === 'Drake' ? colors.push('#ccebc5') : colors.push('#08589e')
     });
 
     return colors;
@@ -260,8 +262,13 @@ function App() {
             colors: assignColors(formattedTracks)
           }
         }]}
-        series={[{ dataKey: 'playcount', label: 'playcount', valueFormatter }]}
+        series={[{ dataKey: 'playcount', valueFormatter }]}
         layout="horizontal"
+        slots={{
+          itemContent: (props) =>
+            Tooltip({ playlistTracks, points: props }),
+        }}
+        tooltip={{ trigger: 'item' }}
         {...chartSetting}
       />
     </div>

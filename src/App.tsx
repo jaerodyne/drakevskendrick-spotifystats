@@ -13,11 +13,13 @@ import {
 } from '../data';
 
 import Tooltip from './components/Tooltip';
+import drakeImg from './assets/img/drake.jpeg';
+import kendrickImg from './assets/img/kendrick.jpeg';
 import './App.css';
 
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState(localStorage.getItem('token'));
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [tracksData, setTracksData] = useState([]);
   const [formattedTracks, setFormattedTracks] = useState([]);
@@ -26,23 +28,23 @@ function App() {
   const fetchToken = async () => {
     const params = new URLSearchParams();
 
-    params.append("client_id", clientId);
-    params.append("client_secret", clientSecret);
-    params.append("grant_type", "client_credentials");
+    params.append('client_id', clientId);
+    params.append('client_secret', clientSecret);
+    params.append('grant_type', 'client_credentials');
 
     try {
-      const result = await fetch("https://accounts.spotify.com/api/token", {
-        method: "POST",
+      const result = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
         headers: {
-          "Authorization": "Basic " + btoa(clientId + ":" + clientSecret),
-          "Content-Type": "application/x-www-form-urlencoded",
+          'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: params,
       });
 
       const token = await result.json();
 
-      localStorage.setItem("token", JSON.stringify(token));
+      localStorage.setItem('token', JSON.stringify(token));
 
       setToken(token);
     } catch (error) {
@@ -54,8 +56,8 @@ function App() {
   const refreshToken = async () => {
     // const artistData = await result.json();
 
-    // if (artistData.hasOwnProperty("error")) {
-    //   if (artistData.error.message === "The access token expired") {
+    // if (artistData.hasOwnProperty('error')) {
+    //   if (artistData.error.message === 'The access token expired') {
     //     refreshToken();
     //   }
     // }
@@ -66,16 +68,16 @@ function App() {
 
     const currentToken = JSON.parse(token)['access_token'];
 
-    params.append("grant_type", "refresh_token");
-    params.append("refresh_token", currentToken);
-    params.append("client_id", clientId);
+    params.append('grant_type', 'refresh_token');
+    params.append('refresh_token', currentToken);
+    params.append('client_id', clientId);
     
     try {
-      const result = await fetch("https://accounts.spotify.com/api/token", {
-        method: "POST",
+      const result = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Authorization": `Basic ${currentToken}`
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': `Basic ${currentToken}`
         },
         body: params,
       });
@@ -84,7 +86,7 @@ function App() {
 
       console.log(token)
 
-      // localStorage.setItem("token", JSON.stringify(token));
+      // localStorage.setItem('token', JSON.stringify(token));
 
       // setToken(token);
     } catch (error) {
@@ -98,7 +100,7 @@ function App() {
     });
 
     return track.playcount;
-    // return new Intl.NumberFormat().format(track.playcount) || "Not found";
+    // return new Intl.NumberFormat().format(track.playcount) || 'Not found';
   }
 
   const getArtistNames = (artists: Array<object>) => {
@@ -108,7 +110,7 @@ function App() {
   const fetchPlaylistTracks = useCallback(async () => {
     try {
       // const result = await fetch(playlistTracksUrl, {
-      //   method: "GET",
+      //   method: 'GET',
       //   headers: {
       //     Authorization: `Bearer  ${JSON.parse(token)['access_token']}`
       //   }
@@ -229,8 +231,8 @@ function App() {
         label: 'Spotify plays',
       },
     ],
-    width: 500,
-    height: 400,
+    width: 600,
+    height: 500,
   };
 
   const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : 'unknown' } plays`;
@@ -243,7 +245,7 @@ function App() {
         return artist.toLowerCase().includes('drake')
       });
 
-      drake === 'Drake' ? colors.push('#ccebc5') : colors.push('#08589e')
+      drake === 'Drake' ? colors.push('#0037b3') : colors.push('#fb1d36')
     });
 
     return colors;
@@ -252,25 +254,65 @@ function App() {
   return (
     <div className='container'>
       <h1>if these bars could talk</h1>
-      <BarChart
-        dataset={formattedTracks}
-        yAxis={[{
-          scaleType: 'band',
-          dataKey: 'name',
-          colorMap: {
-            type: 'ordinal',
-            colors: assignColors(formattedTracks)
-          }
-        }]}
-        series={[{ dataKey: 'playcount', valueFormatter }]}
-        layout="horizontal"
-        slots={{
-          itemContent: (props) =>
-            Tooltip({ playlistTracks, points: props }),
-        }}
-        tooltip={{ trigger: 'item' }}
-        {...chartSetting}
-      />
+      <div className='row'>
+        <div className='img-container'>
+          <img src={drakeImg} alt='drake' className='img' />
+          <img src={kendrickImg} alt='kendrick' className='img' />
+        </div>
+        <div className='bar-chart'>
+          <BarChart
+            {...chartSetting}
+            dataset={formattedTracks}
+            yAxis={[{
+              scaleType: 'band',
+              dataKey: 'name',
+              colorMap: {
+                type: 'ordinal',
+                colors: assignColors(formattedTracks)
+              }
+            }]}
+            series={[{ dataKey: 'playcount', valueFormatter }]}
+            layout='horizontal'
+            slots={{
+              itemContent: (props) =>
+                Tooltip({ playlistTracks, points: props }),
+            }}
+            tooltip={{ trigger: 'item' }}
+            sx={{
+              padding: '1rem',
+              '& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel':{
+                fill: '#0037b3'
+              },
+              '& .MuiChartsAxis-tickLabel tspan': { fontSize: '0.75rem' },
+              // change bottom label styles
+              '& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel':{
+                  strokeWidth:'0.5',
+                  fill:'#fb1d36'
+              },
+                // bottomAxis Line Styles
+              '& .MuiChartsAxis-bottom .MuiChartsAxis-line':{
+                stroke:'#fb1d36',
+                strokeWidth:0.4
+              },
+              '& .MuiChartsAxis-bottom .MuiChartsAxis-label':{
+                strokeWidth:'0.4',
+                fill:'#fb1d36',
+              },
+              // leftAxis Line Styles
+              '& .MuiChartsAxis-left .MuiChartsAxis-line':{
+                stroke:'#fb1d36',
+                strokeWidth:0.4
+              }
+            }}
+            margin={{
+              left: 110,
+              right: 110,
+              top: 110,
+              bottom: 110,
+            }}
+          />
+        </div>
+      </div>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 const Tooltip = (formattedData) => {
   const { points: { itemData: { dataIndex }, series: { data }} } = formattedData;
-  const track = formattedData.playlistTracks[0][dataIndex].track;
+  const track = formattedData.playlistTracks[0][dataIndex]?.track;
   const trackPreviewUrl = track.preview_url;
   const trackAlbumImage = track.album.images[0].url;
   const trackName = track.name;

@@ -1,5 +1,11 @@
 import { useEffect, useState, useCallback } from 'react';
-import { BarChart, Bar } from '@mui/x-charts';
+import { BarChart } from '@mui/x-charts';
+import { COLORS } from './utils/Colors';
+import { 
+  assignColors,
+  valueFormatter,
+  chartSetting
+} from './utils/BarChartStyles';
 
 import { 
   clientId,
@@ -227,48 +233,13 @@ function App() {
     return <h2>Loading...</h2>
   }
 
-  const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : 'unknown' } plays`;
-
-  const assignColors = (tracks: Array<FormattedTrackData>) => {
-    const colors: Array<string> = [];
-
-    tracks.map((track) => {
-      const drake = track['artist'].find((artist) => {
-        return artist.toLowerCase().includes('drake')
-      });
-
-      drake === 'Drake' ? colors.push(COLORS_BLUE) : colors.push(COLORS_RED)
-    });
-
-    return colors;
-  }
-
-  const chartSetting = {
-    xAxis: [
-      {
-        label: 'Spotify plays',
-      },
-    ],
-    width: 600,
-    height: 500,
-    margin: {
-      left: 110,
-      right: 110,
-      top: 110,
-      bottom: 110,
-    }
-  };
-
-  const COLORS_RED = '#c1121f';
-  const COLORS_BLUE = '#0037b3';
-
   return (
     <div className='container'>
       <h1>if these bars could talk</h1>
       <div className='row'>
         <div className='img-container'>
           { currentTrack && <div style={{
-            backgroundColor: COLORS_RED,
+            backgroundColor: COLORS.RED,
             width: '50%'
           }}></div> }
           { !barHovered && <img src={drakeImg} alt='drake' className='img' /> }
@@ -299,29 +270,29 @@ function App() {
             sx={{
               padding: '1rem',
               '& .MuiChartsAxis-tickContainer .MuiChartsAxis-tick': {
-                stroke: '#fdf0d5'
+                stroke:  COLORS.OFF_WHITE
               },
               '& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel':{
-                fill: '#fdf0d5'
+                fill:  COLORS.OFF_WHITE
               },
               '& .MuiChartsAxis-tickLabel tspan': { fontSize: '0.75rem' },
               // change bottom label styles
               '& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel':{
                   strokeWidth:'0.5',
-                  fill:'#fdf0d5'
+                  fill: COLORS.OFF_WHITE
               },
                 // bottomAxis Line Styles
               '& .MuiChartsAxis-bottom .MuiChartsAxis-line':{
-                stroke:'#fdf0d5',
+                stroke: COLORS.OFF_WHITE,
                 strokeWidth:0.4
               },
               '& .MuiChartsAxis-bottom .MuiChartsAxis-label':{
                 strokeWidth:'0.4',
-                fill:'#fdf0d5',
+                fill: COLORS.OFF_WHITE,
               },
               // leftAxis Line Styles
               '& .MuiChartsAxis-left .MuiChartsAxis-line':{
-                stroke:'#fdf0d5',
+                stroke: COLORS.OFF_WHITE,
                 strokeWidth:0.4
               }
             }}

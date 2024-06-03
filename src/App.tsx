@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { BarChart, ChartContainer } from '@mui/x-charts';
+import { BarChart, Bar } from '@mui/x-charts';
 
 import { 
   clientId,
@@ -24,6 +24,8 @@ function App() {
   const [tracksData, setTracksData] = useState([]);
   const [formattedTracks, setFormattedTracks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [barHovered, setBarHovered] = useState(false);
+  const [currentTrack, setCurrentTrack] = useState([]);
 
   const fetchToken = async () => {
     const params = new URLSearchParams();
@@ -225,6 +227,22 @@ function App() {
     return <h2>Loading...</h2>
   }
 
+  const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : 'unknown' } plays`;
+
+  const assignColors = (tracks: Array<FormattedTrackData>) => {
+    const colors: Array<string> = [];
+
+    tracks.map((track) => {
+      const drake = track['artist'].find((artist) => {
+        return artist.toLowerCase().includes('drake')
+      });
+
+      drake === 'Drake' ? colors.push(COLORS_BLUE) : colors.push(COLORS_RED)
+    });
+
+    return colors;
+  }
+
   const chartSetting = {
     xAxis: [
       {
@@ -233,82 +251,79 @@ function App() {
     ],
     width: 600,
     height: 500,
+    margin: {
+      left: 110,
+      right: 110,
+      top: 110,
+      bottom: 110,
+    }
   };
 
-  const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : 'unknown' } plays`;
-
-  const assignColors = (tracks) => {
-    const colors: Array<string> = [];
-
-    tracks.map((track) => {
-      const drake = track['artist'].find((artist) => {
-        return artist.toLowerCase().includes('drake')
-      });
-
-      drake === 'Drake' ? colors.push('#0037b3') : colors.push('#fb1d36')
-    });
-
-    return colors;
-  }
+  const COLORS_RED = '#c1121f';
+  const COLORS_BLUE = '#0037b3';
 
   return (
     <div className='container'>
       <h1>if these bars could talk</h1>
       <div className='row'>
         <div className='img-container'>
-          <img src={drakeImg} alt='drake' className='img' />
+          { currentTrack && <div style={{
+            backgroundColor: COLORS_RED,
+            width: '50%'
+          }}></div> }
+          { !barHovered && <img src={drakeImg} alt='drake' className='img' /> }
           <img src={kendrickImg} alt='kendrick' className='img' />
         </div>
         <div className='bar-chart'>
           <BarChart
             {...chartSetting}
-            dataset={formattedTracks}
-            yAxis={[{
-              scaleType: 'band',
-              dataKey: 'name',
-              colorMap: {
-                type: 'ordinal',
-                colors: assignColors(formattedTracks)
+            yAxis={[
+              {
+                scaleType: 'band',
+                dataKey: 'name',
+                colorMap: {
+                  type: 'ordinal',
+                  colors: assignColors(formattedTracks)
+                }
               }
-            }]}
+            ]}
+            dataset={formattedTracks}
             series={[{ dataKey: 'playcount', valueFormatter }]}
             layout='horizontal'
             slots={{
-              itemContent: (props) =>
-                Tooltip({ playlistTracks, points: props }),
+              itemContent: (props) => {
+                setBarHovered(true)
+                return Tooltip({ playlistTracks, setCurrentTrack, points: props })}
             }}
             tooltip={{ trigger: 'item' }}
             sx={{
               padding: '1rem',
+              '& .MuiChartsAxis-tickContainer .MuiChartsAxis-tick': {
+                stroke: '#fdf0d5'
+              },
               '& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel':{
-                fill: '#0037b3'
+                fill: '#fdf0d5'
               },
               '& .MuiChartsAxis-tickLabel tspan': { fontSize: '0.75rem' },
               // change bottom label styles
               '& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel':{
                   strokeWidth:'0.5',
-                  fill:'#fb1d36'
+                  fill:'#fdf0d5'
               },
                 // bottomAxis Line Styles
               '& .MuiChartsAxis-bottom .MuiChartsAxis-line':{
-                stroke:'#fb1d36',
+                stroke:'#fdf0d5',
                 strokeWidth:0.4
               },
               '& .MuiChartsAxis-bottom .MuiChartsAxis-label':{
                 strokeWidth:'0.4',
-                fill:'#fb1d36',
+                fill:'#fdf0d5',
               },
               // leftAxis Line Styles
               '& .MuiChartsAxis-left .MuiChartsAxis-line':{
-                stroke:'#fb1d36',
+                stroke:'#fdf0d5',
                 strokeWidth:0.4
               }
-            }}
-            margin={{
-              left: 110,
-              right: 110,
-              top: 110,
-              bottom: 110,
             }}
           />
         </div>

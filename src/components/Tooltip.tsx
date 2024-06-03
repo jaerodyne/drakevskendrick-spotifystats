@@ -7,13 +7,19 @@ const Tooltip = (formattedData) => {
   const artistName = track.artists.map((artist) => artist.name).join(", ");
   const playcount = new Intl.NumberFormat().format(data[dataIndex]);
 
+  console.log(track)
+
+  formattedData.setCurrentTrack(track);
+
   return (
     <div className="tooltip">
       <audio autoPlay src={trackPreviewUrl} />
       <img src={trackAlbumImage} className="img" />
-      <h2>{trackName}</h2>
-      <h3>{artistName}</h3>
-      <h3>{playcount} plays</h3>
+      <div className="track-description">
+        <h2>{trackName}</h2>
+        <h3>{artistName}</h3>
+        <h3>{playcount} plays</h3>
+      </div>
     </div>
   )
 }

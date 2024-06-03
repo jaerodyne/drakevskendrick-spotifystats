@@ -2,7 +2,10 @@ import drakeImg from '../assets/img/drake.jpeg';
 import { COLORS } from '../utils/colors';
 
 const Drake = ({ track, hideImg }) => {
+  const trackAlbumImage = track?.album?.images[0].url;
+  const trackName = track?.name;
   const artistName = track?.artists?.map((artist) => artist.name.toLowerCase()).join(", ") || "";
+  const playcount = new Intl.NumberFormat().format(10000000);
 
   return (
     <>
@@ -12,15 +15,19 @@ const Drake = ({ track, hideImg }) => {
         className='img'
         style={{display: artistName.includes('kendrick') && hideImg ? 'none' : 'block' }}
       />
-      <div style={{
-        backgroundColor: COLORS.BLUE,
-        width: '50%',
-        display: artistName === 'drake' ? 'block' : 'none'
-      }}>
+      <div
+        className='track-info'
+        style={{
+          backgroundColor: COLORS.BLUE,
+          width: '50%',
+          display: artistName === 'drake' ? 'flex' : 'none'
+        }}
+      >
+        <img src={trackAlbumImage} className="img" />
         <div className="track-description">
-          <h2>euphoria</h2>
-          <h3>artistName</h3>
-          <h3>plays</h3>
+          <h2>{trackName}</h2>
+          <h3>{artistName}</h3>
+          <h3>{playcount} plays</h3>
         </div>
       </div>
     </>

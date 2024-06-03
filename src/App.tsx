@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback } from 'react';
 import { BarChart } from '@mui/x-charts';
-import { COLORS } from './utils/Colors';
+import { COLORS } from './utils/colors';
 import { 
   assignColors,
   valueFormatter,
   chartSetting
-} from './utils/BarChartStyles';
+} from './utils/barChartStyles';
 
 import { 
   clientId,
@@ -18,11 +18,11 @@ import {
   spotifyDummyData,
 } from '../data';
 
+import Drake from './components/Drake';
+import Kendrick from './components/Kendrick';
 import Tooltip from './components/Tooltip';
-import drakeImg from './assets/img/drake.jpeg';
-import kendrickImg from './assets/img/kendrick.jpeg';
-import './App.css';
 
+import './App.css';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -32,6 +32,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [barHovered, setBarHovered] = useState(false);
   const [currentTrack, setCurrentTrack] = useState([]);
+  const [currentArtist, setCurrentArtist] = useState([]);
+  const [hideImg, setHideImg] = useState(false);
 
   const fetchToken = async () => {
     const params = new URLSearchParams();
@@ -238,12 +240,8 @@ function App() {
       <h1>if these bars could talk</h1>
       <div className='row'>
         <div className='img-container'>
-          { currentTrack && <div style={{
-            backgroundColor: COLORS.RED,
-            width: '50%'
-          }}></div> }
-          { !barHovered && <img src={drakeImg} alt='drake' className='img' /> }
-          <img src={kendrickImg} alt='kendrick' className='img' />
+          <Drake track={currentTrack} hideImg={hideImg} />
+          <Kendrick track={currentTrack} hideImg={hideImg} />
         </div>
         <div className='bar-chart'>
           <BarChart
@@ -264,7 +262,11 @@ function App() {
             slots={{
               itemContent: (props) => {
                 setBarHovered(true)
-                return Tooltip({ playlistTracks, setCurrentTrack, points: props })}
+                return Tooltip({
+                  playlistTracks, setCurrentTrack, setCurrentArtist,
+                  setHideImg,
+                  points: props 
+                })}
             }}
             tooltip={{ trigger: 'item' }}           
           />

@@ -1,5 +1,5 @@
 import { FormattedTrackData } from "../../data";
-import { COLORS } from "./Colors";
+import { COLORS } from "./colors";
 
 export const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : 'unknown' } plays`;
 

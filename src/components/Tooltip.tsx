@@ -4,12 +4,14 @@ const Tooltip = (formattedData) => {
   const trackPreviewUrl = track.preview_url;
   const trackAlbumImage = track.album.images[0].url;
   const trackName = track.name;
-  const artistName = track.artists.map((artist) => artist.name).join(", ");
+  const artistName = track.artists.map((artist) => artist.name.toLowerCase()).join(", ");
   const playcount = new Intl.NumberFormat().format(data[dataIndex]);
 
   console.log(track)
 
-  formattedData.setCurrentTrack(track);
+  formattedData.setCurrentTrack(track)
+  formattedData.setCurrentArtist(artistName)
+  formattedData.setHideImg(true)
 
   return (
     <div className="tooltip">

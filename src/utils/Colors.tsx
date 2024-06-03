@@ -5,4 +5,4 @@ export const COLORS = {
   OFF_WHITE: '#fdf0d5',
   DARK_BLUE: '#003049',
   LIGHT_BLUE: '#669bbc',
-} 
+}

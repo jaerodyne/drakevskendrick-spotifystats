@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
 import { BarChart } from '@mui/x-charts';
-import { COLORS } from './utils/colors';
 import { 
   assignColors,
   valueFormatter,
@@ -30,7 +29,6 @@ function App() {
   const [tracksData, setTracksData] = useState([]);
   const [formattedTracks, setFormattedTracks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [barHovered, setBarHovered] = useState(false);
   const [currentTrack, setCurrentTrack] = useState({});
   const [currentArtist, setCurrentArtist] = useState([]);
   const [currentPlaycount, setCurrentPlaycount] = useState(0);
@@ -270,7 +268,6 @@ function App() {
             layout='horizontal'
             slots={{
               itemContent: (props) => {
-                setBarHovered(true)
                 return Tooltip({
                   playlistTracks,
                   setCurrentTrack,

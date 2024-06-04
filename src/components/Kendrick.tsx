@@ -1,5 +1,7 @@
+import CountUp from 'react-countup';
 import kendrickImg from "../assets/img/kendrick.jpeg";
 import { COLORS } from "../utils/colors";
+import PlaycountCounter from './PlaycountCounter';
 
 const Kendrick = ({ track, playcount, hideImg }) => {
   const trackAlbumImage = track?.album?.images[0].url;
@@ -20,7 +22,7 @@ const Kendrick = ({ track, playcount, hideImg }) => {
         <div className="track-description">
           <h2>{trackName}</h2>
           <h3>{artistName}</h3>
-          <h3>{formattedPlaycount} plays</h3>
+          <PlaycountCounter playcount={playcount} />
         </div>
       </div>
       <img

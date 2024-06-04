@@ -1,5 +1,7 @@
 import drakeImg from '../assets/img/drake.jpeg';
 import { COLORS } from '../utils/colors';
+import CountUp from 'react-countup';
+import PlaycountCounter from './PlaycountCounter';
 
 const Drake = ({ track, playcount, hideImg }) => {
   const trackAlbumImage = track?.album?.images[0].url;
@@ -26,7 +28,7 @@ const Drake = ({ track, playcount, hideImg }) => {
         <div className="track-description">
           <h2>{trackName}</h2>
           <h3>{artistName}</h3>
-          <h3>{formattedPlaycount} plays</h3>
+          <PlaycountCounter playcount={playcount} />
         </div>
       </div>
     </>

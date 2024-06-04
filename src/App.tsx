@@ -31,8 +31,9 @@ function App() {
   const [formattedTracks, setFormattedTracks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [barHovered, setBarHovered] = useState(false);
-  const [currentTrack, setCurrentTrack] = useState([]);
+  const [currentTrack, setCurrentTrack] = useState({});
   const [currentArtist, setCurrentArtist] = useState([]);
+  const [currentPlaycount, setCurrentPlaycount] = useState(0);
   const [hideImg, setHideImg] = useState(false);
 
   const fetchToken = async () => {
@@ -109,7 +110,7 @@ function App() {
       return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === track_id
     });
 
-    return track.playcount;
+    return track?.playcount || 0;
     // return new Intl.NumberFormat().format(track.playcount) || 'Not found';
   }
 
@@ -240,8 +241,16 @@ function App() {
       <h1>if these bars could talk</h1>
       <div className='row'>
         <div className='img-container'>
-          <Drake track={currentTrack} hideImg={hideImg} />
-          <Kendrick track={currentTrack} hideImg={hideImg} />
+          <Drake
+            track={currentTrack}
+            playcount={currentPlaycount}
+            hideImg={hideImg} 
+          />
+          <Kendrick
+            track={currentTrack}
+            playcount={currentPlaycount}
+            hideImg={hideImg}
+          />
         </div>
         <div className='bar-chart'>
           <BarChart
@@ -263,9 +272,12 @@ function App() {
               itemContent: (props) => {
                 setBarHovered(true)
                 return Tooltip({
-                  playlistTracks, setCurrentTrack, setCurrentArtist,
+                  playlistTracks,
+                  setCurrentTrack,
+                  setCurrentArtist,
                   setHideImg,
-                  points: props 
+                  setCurrentPlaycount,
+                  points: props
                 })}
             }}
             tooltip={{ trigger: 'item' }}           

@@ -1,11 +1,11 @@
 import kendrickImg from "../assets/img/kendrick.jpeg";
 import { COLORS } from "../utils/colors";
 
-const Kendrick = ({ track, hideImg }) => {
+const Kendrick = ({ track, playcount, hideImg }) => {
   const trackAlbumImage = track?.album?.images[0].url;
   const trackName = track?.name;
   const artistName = track?.artists?.map((artist) => artist.name.toLowerCase()).join(", ") || "";
-  const playcount = new Intl.NumberFormat().format(10000000);
+  const formattedPlaycount = new Intl.NumberFormat().format(playcount);
 
   return (
     <>
@@ -13,7 +13,6 @@ const Kendrick = ({ track, hideImg }) => {
         className='track-info'
         style={{
           backgroundColor: COLORS.RED,
-          width: '50%',
           display: artistName.includes('kendrick') ? 'flex' : 'none',
         }}
       >
@@ -21,7 +20,7 @@ const Kendrick = ({ track, hideImg }) => {
         <div className="track-description">
           <h2>{trackName}</h2>
           <h3>{artistName}</h3>
-          <h3>{playcount} plays</h3>
+          <h3>{formattedPlaycount} plays</h3>
         </div>
       </div>
       <img

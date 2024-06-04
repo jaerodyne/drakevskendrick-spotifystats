@@ -1,11 +1,11 @@
 import drakeImg from '../assets/img/drake.jpeg';
 import { COLORS } from '../utils/colors';
 
-const Drake = ({ track, hideImg }) => {
+const Drake = ({ track, playcount, hideImg }) => {
   const trackAlbumImage = track?.album?.images[0].url;
   const trackName = track?.name;
   const artistName = track?.artists?.map((artist) => artist.name.toLowerCase()).join(", ") || "";
-  const playcount = new Intl.NumberFormat().format(10000000);
+  const formattedPlaycount = new Intl.NumberFormat().format(playcount);
 
   return (
     <>
@@ -19,7 +19,6 @@ const Drake = ({ track, hideImg }) => {
         className='track-info'
         style={{
           backgroundColor: COLORS.BLUE,
-          width: '50%',
           display: artistName === 'drake' ? 'flex' : 'none'
         }}
       >
@@ -27,7 +26,7 @@ const Drake = ({ track, hideImg }) => {
         <div className="track-description">
           <h2>{trackName}</h2>
           <h3>{artistName}</h3>
-          <h3>{playcount} plays</h3>
+          <h3>{formattedPlaycount} plays</h3>
         </div>
       </div>
     </>

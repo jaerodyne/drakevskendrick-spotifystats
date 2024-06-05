@@ -51,6 +51,17 @@
   display: flex;
 }
 
+.img-container {
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
+}
+
 .img {
   width: 50%;
+}
+
+.album-img {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 1rem;
 }

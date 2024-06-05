@@ -34,12 +34,15 @@ export const chartSetting = {
  sx: {
     padding: '1rem',
     '& .MuiChartsAxis-tickContainer .MuiChartsAxis-tick': {
-      stroke:  COLORS.OFF_WHITE
+      stroke: COLORS.OFF_WHITE
     },
     '& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel':{
-      fill:  COLORS.OFF_WHITE
+      fill: COLORS.OFF_WHITE
     },
-    '& .MuiChartsAxis-tickLabel tspan': { fontSize: '0.75rem' },
+    '& .MuiChartsAxis-tickLabel tspan': {
+      fontSize: '1.1rem',
+      fontFamily: 'Bangers'
+     },
     // change bottom label styles
     '& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel':{
         strokeWidth:'0.5',
@@ -50,12 +53,14 @@ export const chartSetting = {
       stroke: COLORS.OFF_WHITE,
       strokeWidth:0.4
     },
-    '& .MuiChartsAxis-bottom .MuiChartsAxis-label':{
+    '& .MuiChartsAxis-bottom .MuiChartsAxis-label': {
       strokeWidth:'0.4',
       fill: COLORS.OFF_WHITE,
+      fontFamily: 'Bangers',
+      marginTop: '1rem'
     },
     // leftAxis Line Styles
-    '& .MuiChartsAxis-left .MuiChartsAxis-line':{
+    '& .MuiChartsAxis-left .MuiChartsAxis-line': {
       stroke: COLORS.OFF_WHITE,
       strokeWidth:0.4
     }

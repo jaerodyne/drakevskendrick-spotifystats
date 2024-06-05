@@ -1,4 +1,3 @@
-import CountUp from 'react-countup';
 import kendrickImg from "../assets/img/kendrick.jpeg";
 import { COLORS } from "../utils/colors";
 import PlaycountCounter from './PlaycountCounter';
@@ -7,7 +6,6 @@ const Kendrick = ({ track, playcount, hideImg }) => {
   const trackAlbumImage = track?.album?.images[0].url;
   const trackName = track?.name;
   const artistName = track?.artists?.map((artist) => artist.name.toLowerCase()).join(", ") || "";
-  const formattedPlaycount = new Intl.NumberFormat().format(playcount);
 
   return (
     <>
@@ -18,7 +16,7 @@ const Kendrick = ({ track, playcount, hideImg }) => {
           display: artistName.includes('kendrick') ? 'flex' : 'none',
         }}
       >
-        <img src={trackAlbumImage} className="img" />
+        <img src={trackAlbumImage} className="album-img" />
         <div className="track-description">
           <h2>{trackName}</h2>
           <h3>{artistName}</h3>

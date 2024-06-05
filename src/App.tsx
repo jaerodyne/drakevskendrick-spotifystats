@@ -5,7 +5,7 @@ import {
   valueFormatter,
   chartSetting
 } from './utils/barChartStyles';
-
+import { fetchWrapper } from './utils/responseHandler';
 import { 
   clientId,
   clientSecret,
@@ -42,7 +42,7 @@ function App() {
     params.append('grant_type', 'client_credentials');
 
     try {
-      const result = await fetch('https://accounts.spotify.com/api/token', {
+      const result = await fetchWrapper('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
           'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
@@ -62,17 +62,8 @@ function App() {
   }
 
   // TODO: Figure out right client params
+  // may just have to fetch new token instead of refreshing it
   const refreshToken = async () => {
-    // const artistData = await result.json();
-
-    // if (artistData.hasOwnProperty('error')) {
-    //   if (artistData.error.message === 'The access token expired') {
-    //     refreshToken();
-    //   }
-    // }
-
-    // setArtist(artistData);
-
     const params = new URLSearchParams();
 
     const currentToken = JSON.parse(token)['access_token'];
@@ -82,16 +73,16 @@ function App() {
     params.append('client_id', clientId);
     
     try {
-      const result = await fetch('https://accounts.spotify.com/api/token', {
+      const response = await fetchWrapper('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': `Basic ${currentToken}`
+          'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
         },
         body: params,
       });
 
-      const token = await result.json();
+      const token = await response.json();
 
       console.log(token)
 
@@ -99,6 +90,7 @@ function App() {
 
       // setToken(token);
     } catch (error) {
+      debugger
       console.log(error);
     }
   }
@@ -118,20 +110,20 @@ function App() {
 
   const fetchPlaylistTracks = useCallback(async () => {
     try {
-      // const result = await fetch(playlistTracksUrl, {
-      //   method: 'GET',
-      //   headers: {
-      //     Authorization: `Bearer  ${JSON.parse(token)['access_token']}`
-      //   }
-      // });
+      const response: Response = await fetchWrapper(playlistTracksUrl, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer  ${JSON.parse(token)['access_token']}`
+        }
+      });
 
-      // const playlistData = await result.json();
+      const playlistData = await response.json();
 
-      // // Remove 'The Heart Part 6' track since it's not officially released under Drake on Spotify
-      // playlistData['items'].pop();
+      // Remove 'The Heart Part 6' track since it's not officially released under Drake on Spotify
+      playlistData['items'].pop();
 
-      // const data = playlistData['items'];
-      const data = spotifyDummyData['tracks']['items'];
+      const data = playlistData['items'];
+      // const data = spotifyDummyData['tracks']['items'];
 
       setPlaylistTracks((currentState) => {
         const newState = [...currentState, data ]; 
@@ -140,6 +132,14 @@ function App() {
 
       return data;
     } catch (error) {
+      switch (error.response.status) {
+        case 400: /* Handle */ break;
+        case 401:
+          fetchToken();
+          break;
+        case 404: /* Handle */ break;
+        case 500: /* Handle */ break;
+      }
       console.log(error)
     }
   }, [])

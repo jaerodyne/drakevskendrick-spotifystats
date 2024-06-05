@@ -8,7 +8,7 @@ export const assignColors = (tracks: Array<FormattedTrackData>) => {
 
   tracks.map((track) => {
     const drake = track['artist'].find((artist: string) => {
-      return artist.toLowerCase().includes('drake')
+      return artist?.toLowerCase().includes('drake');
     });
 
     drake === 'Drake' ? colors.push(COLORS.BLUE) : colors.push(COLORS.RED)

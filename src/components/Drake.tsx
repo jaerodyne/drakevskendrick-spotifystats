@@ -1,6 +1,5 @@
 import drakeImg from '../assets/img/drake.jpeg';
-import { COLORS } from '../utils/colors';
-import PlaycountCounter from './PlaycountCounter';
+import TrackInfo from './TrackInfo';
 
 const Drake = ({ track, playcount, hideImg }) => {
   const trackAlbumImage = track?.album?.images[0].url;
@@ -15,20 +14,14 @@ const Drake = ({ track, playcount, hideImg }) => {
         className='img'
         style={{display: artistName.includes('kendrick') && hideImg ? 'none' : 'block' }}
       />
-      <div
-        className='track-info'
-        style={{
-          backgroundColor: COLORS.BLUE,
-          display: artistName === 'drake' ? 'flex' : 'none'
-        }}
-      >
-        <img src={trackAlbumImage} className="album-img" />
-        <div className="track-description">
-          <h2>{trackName}</h2>
-          <h3>{artistName}</h3>
-          <PlaycountCounter playcount={playcount} />
-        </div>
-      </div>
+      { artistName === 'drake' &&
+        <TrackInfo
+          artistName={artistName}
+          trackAlbumImage={trackAlbumImage}
+          trackName={trackName}
+          playcount={playcount}
+        />
+      }
     </>
   )
 }

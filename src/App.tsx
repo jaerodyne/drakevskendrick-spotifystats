@@ -242,7 +242,7 @@ function App() {
           <Drake
             track={currentTrack}
             playcount={currentPlaycount}
-            hideImg={hideImg} 
+            hideImg={hideImg}
           />
           <Kendrick
             track={currentTrack}

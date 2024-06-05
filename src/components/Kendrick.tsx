@@ -1,6 +1,5 @@
 import kendrickImg from "../assets/img/kendrick.jpeg";
-import { COLORS } from "../utils/colors";
-import PlaycountCounter from './PlaycountCounter';
+import TrackInfo from "./TrackInfo";
 
 const Kendrick = ({ track, playcount, hideImg }) => {
   const trackAlbumImage = track?.album?.images[0].url;
@@ -9,20 +8,14 @@ const Kendrick = ({ track, playcount, hideImg }) => {
 
   return (
     <>
-      <div
-        className='track-info'
-        style={{
-          backgroundColor: COLORS.RED,
-          display: artistName.includes('kendrick') ? 'flex' : 'none',
-        }}
-      >
-        <img src={trackAlbumImage} className="album-img" />
-        <div className="track-description">
-          <h2>{trackName}</h2>
-          <h3>{artistName}</h3>
-          <PlaycountCounter playcount={playcount} />
-        </div>
-      </div>
+      { artistName.includes('kendrick') &&
+        <TrackInfo
+          artistName={artistName}
+          trackAlbumImage={trackAlbumImage}
+          trackName={trackName}
+          playcount={playcount}
+        />
+      }
       <img
         src={kendrickImg}
         alt='kendrick'

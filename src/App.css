@@ -65,3 +65,11 @@
   height: 200px;
   margin-bottom: 1rem;
 }
+
+.award {
+  font-size: 18px;
+}
+
+.count-up {
+  margin-left: 0.6rem;
+}

@@ -14,7 +14,6 @@ import {
   trackInfo,
   dummyData,
   FormattedTrackData,
-  spotifyDummyData,
 } from '../data';
 
 import Drake from './components/Drake';
@@ -61,47 +60,12 @@ function App() {
     }
   }
 
-  // TODO: Figure out right client params
-  // may just have to fetch new token instead of refreshing it
-  const refreshToken = async () => {
-    const params = new URLSearchParams();
-
-    const currentToken = JSON.parse(token)['access_token'];
-
-    params.append('grant_type', 'refresh_token');
-    params.append('refresh_token', currentToken);
-    params.append('client_id', clientId);
-    
-    try {
-      const response = await fetchWrapper('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
-        },
-        body: params,
-      });
-
-      const token = await response.json();
-
-      console.log(token)
-
-      // localStorage.setItem('token', JSON.stringify(token));
-
-      // setToken(token);
-    } catch (error) {
-      debugger
-      console.log(error);
-    }
-  }
-
   const getTrackPlayCount = (track_id: string, playcountData: Array<object>) => {
     const track = playcountData.find((trackData) => { 
       return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === track_id
     });
 
     return track?.playcount || 0;
-    // return new Intl.NumberFormat().format(track.playcount) || 'Not found';
   }
 
   const getArtistNames = (artists: Array<object>) => {
@@ -123,7 +87,6 @@ function App() {
       playlistData['items'].pop();
 
       const data = playlistData['items'];
-      // const data = spotifyDummyData['tracks']['items'];
 
       setPlaylistTracks((currentState) => {
         const newState = [...currentState, data ]; 
@@ -135,7 +98,8 @@ function App() {
       switch (error.response.status) {
         case 400: /* Handle */ break;
         case 401:
-          fetchToken();
+          // token has expired, so delete it and get a new one
+          localStorage.removeItem('token');
           break;
         case 404: /* Handle */ break;
         case 500: /* Handle */ break;

@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { Paging, PlaylistTrack } from 'spotify-types';
 import { BarChart } from '@mui/x-charts';
 import { 
   assignColors,
@@ -22,9 +23,14 @@ import Tooltip from './components/Tooltip';
 
 import './App.css';
 
+// interface Props {
+//   playlistTracks: Track[] | [];
+//   setPlaylistTracks: Dispatch<SetStateAction<Track[] | []>>;
+// }
+
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [playlistTracks, setPlaylistTracks] = useState([]);
+  const [playlistTracks, setPlaylistTracks] = useState<PlaylistTrack[] | []>([]);
   const [tracksData, setTracksData] = useState([]);
   const [formattedTracks, setFormattedTracks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +78,7 @@ function App() {
     return artists.map((artist) => artist.name)
   }
 
-  const fetchPlaylistTracks = useCallback(async () => {
+  const fetchPlaylistTracks = useCallback(async(): Promise<PlaylistTrack[]> => {
     try {
       const response: Response = await fetchWrapper(playlistTracksUrl, {
         method: 'GET',
@@ -81,15 +87,14 @@ function App() {
         }
       });
 
-      const playlistData = await response.json();
-
+      const playlistData: Paging<PlaylistTrack> = await response.json();
       // Remove 'The Heart Part 6' track since it's not officially released under Drake on Spotify
       playlistData['items'].pop();
 
-      const data = playlistData['items'];
+      const data: PlaylistTrack[] = playlistData['items'];
 
       setPlaylistTracks((currentState) => {
-        const newState = [...currentState, data ]; 
+        const newState = [...currentState, data ] as PlaylistTrack[]; 
         return newState;
       });
 
@@ -104,9 +109,9 @@ function App() {
         case 404: /* Handle */ break;
         case 500: /* Handle */ break;
       }
-      console.log(error)
+      throw(new Error, "oh no")
     }
-  }, [])
+  }, [token])
 
   const getAlbumTracks = useCallback(async () => {
     const tracks: Array<object> = []
@@ -151,7 +156,7 @@ function App() {
     const playcountData = allData[1];
     const data: Array<FormattedTrackData> = [];
 
-    spotifyData.map((playlistTrack) => {
+    spotifyData.map((playlistTrack: Track) => {
       const { track: { id, name, artists, popularity } } = playlistTrack;
 
       const track: FormattedTrackData = {
@@ -166,7 +171,7 @@ function App() {
     })
 
     setFormattedTracks((currentState) => {
-      return [...currentState, ...data]
+      return [...currentState, ...data] as FormattedTrackData[]
     });
 
     return data;

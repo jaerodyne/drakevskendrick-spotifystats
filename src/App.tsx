@@ -24,12 +24,12 @@ import Tooltip from './components/Tooltip';
 import './App.css';
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState<string>(localStorage.getItem('token') || "");
   const [playlistTracks, setPlaylistTracks] = useState<PlaylistTrack[] | []>([]);
   const [formattedTracks, setFormattedTracks] = useState<FormattedTrackData[] | []>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentTrack, setCurrentTrack] = useState({});
-  const [currentPlaycount, setCurrentPlaycount] = useState(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [currentTrack, setCurrentTrack] = useState<Track | object>({});
+  const [currentPlaycount, setCurrentPlaycount] = useState<number>(0);
   const [hideImg, setHideImg] = useState<boolean>(false);
 
   const fetchToken = async () => {

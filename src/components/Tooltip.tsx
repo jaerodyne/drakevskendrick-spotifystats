@@ -1,5 +1,3 @@
-import { Artist } from "spotify-types";
-
 const Tooltip = (formattedData) => {
   const { points: { itemData: { dataIndex }, series: { data }} } = formattedData;
   const track = formattedData.playlistTracks[0][dataIndex]?.track;

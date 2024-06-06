@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Paging, PlaylistTrack, Artist } from 'spotify-types';
+import { Paging, PlaylistTrack, Track, Artist } from 'spotify-types';
 import { BarChart } from '@mui/x-charts';
 import { 
   assignColors,
@@ -26,8 +26,7 @@ import './App.css';
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [playlistTracks, setPlaylistTracks] = useState<PlaylistTrack[] | []>([]);
-  const [tracksData, setTracksData] = useState<PlaycountTrack[]>([]);
-  const [formattedTracks, setFormattedTracks] = useState([]);
+  const [formattedTracks, setFormattedTracks] = useState<FormattedTrackData[] | []>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentTrack, setCurrentTrack] = useState({});
   const [currentPlaycount, setCurrentPlaycount] = useState(0);
@@ -125,10 +124,6 @@ function App() {
         }
       })
 
-      setTracksData((currentState) => {
-        return [...currentState, ...tracks ] as PlaycountTrack[]
-      });
-
       return tracks;
     } catch(error) {
       console.log(error);
@@ -141,12 +136,10 @@ function App() {
     const data: Array<FormattedTrackData> = [];
 
     spotifyData.map((playlistTrack: PlaylistTrack) => {
-      // const { owner: { name } }: { owner: { name: string } } = car;
-      // const { track: { id, name, artists, popularity } } : {track: { id: string, name: string, artists: Artist[], popularity: number }}  = playlistTrack;
-      const { track: { id, name, artists, popularity } } = playlistTrack;
+      const { id, name, artists, popularity } = playlistTrack.track as Track;
 
       const track: FormattedTrackData = {
-        id,
+        id: Number(id),
         name,
         artist: getArtistNames(artists),
         popularity,

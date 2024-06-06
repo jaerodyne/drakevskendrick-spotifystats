@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Paging, PlaylistTrack } from 'spotify-types';
+import { Paging, PlaylistTrack, Artist } from 'spotify-types';
 import { BarChart } from '@mui/x-charts';
 import { 
   assignColors,
@@ -13,8 +13,8 @@ import {
   playlistTracksUrl,
   albumPlayCountBaseUrl,
   trackInfo,
-  dummyData,
   FormattedTrackData,
+  PlaycountTrack,
 } from '../data';
 
 import Drake from './components/Drake';
@@ -23,21 +23,15 @@ import Tooltip from './components/Tooltip';
 
 import './App.css';
 
-// interface Props {
-//   playlistTracks: Track[] | [];
-//   setPlaylistTracks: Dispatch<SetStateAction<Track[] | []>>;
-// }
-
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [playlistTracks, setPlaylistTracks] = useState<PlaylistTrack[] | []>([]);
-  const [tracksData, setTracksData] = useState([]);
+  const [tracksData, setTracksData] = useState<PlaycountTrack[]>([]);
   const [formattedTracks, setFormattedTracks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentTrack, setCurrentTrack] = useState({});
-  const [currentArtist, setCurrentArtist] = useState([]);
   const [currentPlaycount, setCurrentPlaycount] = useState(0);
-  const [hideImg, setHideImg] = useState(false);
+  const [hideImg, setHideImg] = useState<boolean>(false);
 
   const fetchToken = async () => {
     const params = new URLSearchParams();
@@ -66,19 +60,19 @@ function App() {
     }
   }
 
-  const getTrackPlayCount = (track_id: string, playcountData: Array<object>) => {
-    const track = playcountData.find((trackData) => { 
+  const getTrackPlayCount = (track_id: string, playcountData: PlaycountTrack[]) => {
+    const track: PlaycountTrack | undefined = playcountData.find((trackData) => {
       return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === track_id
     });
 
     return track?.playcount || 0;
   }
 
-  const getArtistNames = (artists: Array<object>) => {
+  const getArtistNames = (artists: Artist[]) => {
     return artists.map((artist) => artist.name)
   }
 
-  const fetchPlaylistTracks = useCallback(async(): Promise<PlaylistTrack[]> => {
+  const fetchPlaylistTracks = useCallback(async (): Promise<PlaylistTrack[] | undefined> => {
     try {
       const response: Response = await fetchWrapper(playlistTracksUrl, {
         method: 'GET',
@@ -109,40 +103,30 @@ function App() {
         case 404: /* Handle */ break;
         case 500: /* Handle */ break;
       }
-      throw(new Error, "oh no")
     }
   }, [token])
 
-  const getAlbumTracks = useCallback(async () => {
-    const tracks: Array<object> = []
-
+  const getAlbumTracks = useCallback(async (): Promise<PlaycountTrack[] | undefined> => {
     try {
-      trackInfo.map((album, index) => {
-        // TODO: Run in production only, API has rate limits
+      const tracks: PlaycountTrack[] | [] = []
 
-        // const responseData = await fetch(albumPlayCountBaseUrl + album.album_id)
-        // const result = await responseData.json();
-
-        //     const track = result['data']['discs'][0]['tracks'].find((trackData) => {
-        //       return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === album.track_id;
-        //     })
-
-        //     console.log(track);
-
-        //     tracks.push(track);
-        //   })
-        const data = dummyData[index];
+      // TODO: Since the playlist has been updated, we may want to rethink using static data for finding the tracks
+      trackInfo.map(async (album) => {
+        const response = await fetchWrapper(albumPlayCountBaseUrl + album.album_id)
+        const responseData = await response.json();
 
         // Check track against Spotify API to make sure it's the right one
-        const track = data['data']['discs'][0]['tracks'].find((trackData) => {
+        const track: PlaycountTrack | undefined = responseData['data']['discs'][0]['tracks'].find((trackData: PlaycountTrack) => {
           return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === album.track_id;
         })
 
-        tracks.push(track);
+        if (track) {
+          tracks.push(track);
+        }
       })
 
       setTracksData((currentState) => {
-        return [...currentState, ...tracks ]
+        return [...currentState, ...tracks ] as PlaycountTrack[]
       });
 
       return tracks;
@@ -151,12 +135,14 @@ function App() {
     }
   }, [])
 
-  const formatTrackData = (allData) => {
-    const spotifyData = allData[0];
-    const playcountData = allData[1];
+  const formatTrackData = (allData: [PlaylistTrack[], PlaycountTrack[]]) => {
+    const spotifyData:  PlaylistTrack[] = allData[0];
+    const playcountData: PlaycountTrack[] = allData[1];
     const data: Array<FormattedTrackData> = [];
 
-    spotifyData.map((playlistTrack: Track) => {
+    spotifyData.map((playlistTrack: PlaylistTrack) => {
+      // const { owner: { name } }: { owner: { name: string } } = car;
+      // const { track: { id, name, artists, popularity } } : {track: { id: string, name: string, artists: Artist[], popularity: number }}  = playlistTrack;
       const { track: { id, name, artists, popularity } } = playlistTrack;
 
       const track: FormattedTrackData = {
@@ -188,7 +174,7 @@ function App() {
         getAlbumTracks()
       ]
     )
-    .then((allData) => {
+    .then((allData: [PlaylistTrack[], PlaycountTrack[]]) => {
       formatTrackData(allData);
     })
     .then(() => {
@@ -240,7 +226,6 @@ function App() {
                 return Tooltip({
                   playlistTracks,
                   setCurrentTrack,
-                  setCurrentArtist,
                   setHideImg,
                   setCurrentPlaycount,
                   points: props

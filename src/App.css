@@ -22,12 +22,10 @@
   max-width: var(--max-width);
   text-align: center;
   align-items: center;
-  gap: 2rem;
 }
 
 .row {
   display: flex;
-  column-gap: 2rem;
 }
 
 .tooltip {
@@ -46,23 +44,21 @@
   color: '#fdf0d5';
 }
 
-.img-container, .bar-chart {
-  width: 50%;
-  display: flex;
-}
-
 .img-container {
+  display: flex;
+  width: 50%;
   -webkit-filter: drop-shadow(5px 5px 5px #222);
   filter: drop-shadow(5px 5px 5px #222);
 }
 
 .img {
   width: 50%;
+  object-fit: cover;
 }
 
 .album-img {
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   margin-bottom: 1rem;
 }
 

@@ -23,11 +23,11 @@ export const chartSetting = {
       label: 'Spotify plays',
     },
   ],
-  width: 600,
-  height: 500,
+  width: 700,
+  height: 600,
   margin: {
-    left: 110,
-    right: 110,
+    left: 250,
+    right: 30,
     top: 110,
     bottom: 110,
   },
@@ -36,7 +36,7 @@ export const chartSetting = {
     '& .MuiChartsAxis-tickContainer .MuiChartsAxis-tick': {
       stroke: COLORS.OFF_WHITE
     },
-    '& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel':{
+    '& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel': {
       fill: COLORS.OFF_WHITE
     },
     '& .MuiChartsAxis-tickLabel tspan': {

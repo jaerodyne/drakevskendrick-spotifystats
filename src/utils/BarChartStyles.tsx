@@ -28,7 +28,7 @@ export const chartSetting = {
   margin: {
     left: 250,
     right: 20,
-    top: 0,
+    top: 50,
     bottom: 50,
   },
  sx: {

@@ -15,6 +15,7 @@ import {
   trackInfo,
   FormattedTrackData,
   PlaycountTrack,
+  wikiUrl,
 } from '../data';
 
 import Drake from './components/Drake';
@@ -184,7 +185,14 @@ function App() {
 
   return (
     <div className='container'>
-      <h1>if these bars could talk</h1>
+      <div className='row header'>
+        <h1>if these bars could talk</h1>
+        <h2>
+          <a href={wikiUrl}>
+            (drake vs. kendrick rap beef 🥩 Mar 22, 2024 - present)
+          </a>
+        </h2>
+      </div>
       <div className='row'>
         <div className='img-container'>
           <Drake

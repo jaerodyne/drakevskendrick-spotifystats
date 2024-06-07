@@ -69,3 +69,25 @@
 .count-up {
   margin-left: 0.6rem;
 }
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer button {
+  padding: 0.3rem 0.5rem;
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
+}
+
+.footer a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: large;
+  color: white;
+  text-decoration: none;
+}

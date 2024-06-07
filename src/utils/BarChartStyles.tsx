@@ -20,16 +20,16 @@ export const assignColors = (tracks: Array<FormattedTrackData>) => {
 export const chartSetting = {
   xAxis: [
     {
-      label: 'Spotify plays',
+      label: 'plays',
     },
   ],
   width: 700,
-  height: 600,
+  height: 500,
   margin: {
     left: 250,
-    right: 30,
-    top: 110,
-    bottom: 110,
+    right: 20,
+    top: 0,
+    bottom: 50,
   },
  sx: {
     padding: '1rem',

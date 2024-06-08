@@ -1,10 +1,10 @@
-import { FormattedTrackData } from "../../data";
+import { FormattedTrackData } from "./types";
 import { COLORS } from "./colors";
 
 export const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : 'unknown' } plays`;
 
-export const assignColors = (tracks: Array<FormattedTrackData>) => {
-  const colors: Array<string> = [];
+export const assignColors = (tracks: FormattedTrackData[]) => {
+  const colors: string[] = [];
 
   tracks.map((track) => {
     const drake = track['artist'].find((artist: string) => {

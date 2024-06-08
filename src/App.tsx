@@ -1,4 +1,8 @@
 import { useEffect, useState } from 'react';
+import {
+  FormattedTrackData,
+  PlaycountTrack,
+} from './utils/types';
 import { Paging, PlaylistTrack, Track, Artist } from 'spotify-types';
 import { BarChart } from '@mui/x-charts';
 import { 
@@ -13,8 +17,6 @@ import {
   playlistTracksUrl,
   albumPlayCountBaseUrl,
   trackInfo,
-  FormattedTrackData,
-  PlaycountTrack,
   wikiUrl,
 } from '../data';
 

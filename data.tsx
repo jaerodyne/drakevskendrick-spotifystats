@@ -1,16 +1,15 @@
+import {
+  PlaycountTrackInfo,
+  PlaycountAPIResponse
+} from "./src/utils/types";
+
 export const clientId: string = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 export const clientSecret: string = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 export const playlistTracksUrl: string = "https://api.spotify.com/v1/playlists/7JHlkZQ9HZ5dgEDZCBeAsW/tracks";
 export const albumPlayCountBaseUrl: string = "https://api.t4ils.dev/albumPlayCount?albumid=";
 export const wikiUrl: string = "https://en.wikipedia.org/wiki/Drake%E2%80%93Kendrick_Lamar_feud";
 
-interface PlaycountTrackInfo {
-  album_id: string;
-  track_id: string;
-  name: string;
-}
-
-export const trackInfo: Array<PlaycountTrackInfo> = [
+export const trackInfo: PlaycountTrackInfo[] = [
   { album_id: "4iqbFIdGOTzXeDtt9owjQn", track_id: "2tudvzsrR56uom6smgOcSf", name: "Like That" },
   { album_id: "06me0leRR3AuF4IFiEytml", track_id: "3eh51r6rFWAlGQRlHx9QnQ", name: "Push Ups" },
   { album_id: "32bR4LcEc1PvJEhaKoo4ZN", track_id: "77DRzu7ERs0TX3roZcre7Q", name: "euphoria" },
@@ -19,70 +18,7 @@ export const trackInfo: Array<PlaycountTrackInfo> = [
   { album_id: "5JjnoGJyOxfSZUZtk2rRwZ", track_id: "6AI3ezQ4o3HUoP6Dhudph3", name: "Not Like Us" },
 ]
 
-export interface PlaycountAPIResponse {
-  success: boolean;
-  data: object;
-}
-
-export interface PlaycountAPIResponseData {
-  uri:         string;
-  name:        string;
-  cover:       Cover;
-  year:        number;
-  month:       number;
-  day:         number;
-  track_count: number;
-  discs:       Disc[];
-  copyrights:  string[];
-  artists:     Artist[];
-  related:     Related;
-  type:        string;
-  label:       string;
-}
-
-export interface Artist {
-  name:  Name;
-  uri:   URI;
-  image: Cover;
-}
-
-export interface Cover {
-  uri: string;
-}
-
-export enum Name {
-  Future = "Future",
-  MetroBoomin = "Metro Boomin",
-}
-
-export enum URI {
-  SpotifyArtist0IEtIxbK0KxaSlF7G42ZOp = "spotify:artist:0iEtIxbK0KxaSlF7G42ZOp",
-  SpotifyArtist1RyvyyTE3XzB2ZywiAwp0I = "spotify:artist:1RyvyyTE3xzB2ZywiAwp0i",
-}
-
-export interface Disc {
-  number: number;
-  name:   string;
-  tracks: PlaycountTrack[];
-}
-
-export interface PlaycountTrack {
-  uri:        string;
-  playcount:  number;
-  name:       string;
-  popularity: number;
-  number:     number;
-  duration:   number;
-  explicit:   boolean;
-  playable:   boolean;
-  artists:    Artist[];
-}
-
-export interface Related {
-  releases: any[];
-}
-
-export const dummyData: Array<PlaycountAPIResponse> = [
+export const dummyData: PlaycountAPIResponse[] = [
   {
     "success": true,
     "data": {
@@ -868,14 +804,6 @@ export const dummyData: Array<PlaycountAPIResponse> = [
     }
   },
 ]
-
-export interface FormattedTrackData {
-  id: number;
-  name: string;
-  artist: Array<string>
-  popularity: number;
-  playcount: number;
-}
 
 export const spotifyDummyData: object = {
   "collaborative": false,

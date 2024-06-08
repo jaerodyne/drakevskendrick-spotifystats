@@ -1,4 +1,6 @@
-const Tooltip = (formattedData) => {
+import { TooltipProps } from "../utils/types";
+
+const Tooltip = (formattedData: TooltipProps) => {
   const { points: { itemData: { dataIndex }, series: { data }} } = formattedData;
   const track = formattedData.playlistTracks[0][dataIndex]?.track;
   const trackPreviewUrl = track?.preview_url;

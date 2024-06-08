@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import CountUp from 'react-countup';
+import { PlaycountCounterProps } from '../utils/types';
 
-const PlaycountCounter = ({ playcount }) => {
+const PlaycountCounter = ({ playcount }: PlaycountCounterProps) => {
   const [showAwardEmoji, setShowAwardEmoji] = useState(false);
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { Paging, PlaylistTrack, Track, Artist } from 'spotify-types';
 import { BarChart } from '@mui/x-charts';
 import { 
@@ -72,92 +72,92 @@ function App() {
     return artists.map((artist) => artist.name)
   }
 
-  const fetchPlaylistTracks = useCallback(async (): Promise<PlaylistTrack[] | undefined> => {
-    try {
-      const response: Response = await fetchWrapper(playlistTracksUrl, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer  ${JSON.parse(token)['access_token']}`
+  useEffect(() => {
+    const fetchPlaylistTracks = async (): Promise<PlaylistTrack[] | undefined> => {
+      try {
+        const response: Response = await fetchWrapper(playlistTracksUrl, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer  ${JSON.parse(token)['access_token']}`
+          }
+        });
+
+        const playlistData: Paging<PlaylistTrack> = await response.json();
+        // Remove 'The Heart Part 6' track since it's not officially released under Drake on Spotify
+        playlistData['items'].pop();
+
+        const data: PlaylistTrack[] = playlistData['items'];
+
+        setPlaylistTracks((currentState) => {
+          const newState = [...currentState, data ] as PlaylistTrack[]; 
+          return newState;
+        });
+
+        return data;
+      } catch (error) {
+        switch (error.response.status) {
+          case 400: /* Handle */ break;
+          case 401:
+            // token has expired, so delete it and get a new one
+            localStorage.removeItem('token');
+            break;
+          case 404: /* Handle */ break;
+          case 500: /* Handle */ break;
         }
-      });
+      }
+    }
 
-      const playlistData: Paging<PlaylistTrack> = await response.json();
-      // Remove 'The Heart Part 6' track since it's not officially released under Drake on Spotify
-      playlistData['items'].pop();
+    const getAlbumTracks = async (): Promise<PlaycountTrack[] | undefined> => {
+      try {
+        const tracks: PlaycountTrack[] = []
 
-      const data: PlaylistTrack[] = playlistData['items'];
+        // TODO: Since the playlist has been updated, we may want to rethink using static data for finding the tracks
+        trackInfo.map(async (album) => {
+          const response = await fetchWrapper(albumPlayCountBaseUrl + album.album_id)
+          const responseData = await response.json();
 
-      setPlaylistTracks((currentState) => {
-        const newState = [...currentState, data ] as PlaylistTrack[]; 
-        return newState;
+          // Check track against Spotify API to make sure it's the right one
+          const track: PlaycountTrack | undefined = responseData['data']['discs'][0]['tracks'].find((trackData: PlaycountTrack) => {
+            return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === album.track_id;
+          })
+
+          if (track) {
+            tracks.push(track);
+          }
+        })
+
+        return tracks;
+      } catch(error) {
+        console.log(error);
+      }
+    }
+
+    const formatTrackData = (allData: [PlaylistTrack[], PlaycountTrack[]]) => {
+      const spotifyData:  PlaylistTrack[] = allData[0];
+      const playcountData: PlaycountTrack[] = allData[1];
+      const data: Array<FormattedTrackData> = [];
+
+      spotifyData.map((playlistTrack: PlaylistTrack) => {
+        const { id, name, artists, popularity } = playlistTrack.track as Track;
+
+        const track: FormattedTrackData = {
+          id: Number(id),
+          name,
+          artist: getArtistNames(artists),
+          popularity,
+          playcount: getTrackPlayCount(id, playcountData)
+        }
+        
+        data.push(track);
+      })
+
+      setFormattedTracks((currentState) => {
+        return [...currentState, ...data] as FormattedTrackData[]
       });
 
       return data;
-    } catch (error) {
-      switch (error.response.status) {
-        case 400: /* Handle */ break;
-        case 401:
-          // token has expired, so delete it and get a new one
-          localStorage.removeItem('token');
-          break;
-        case 404: /* Handle */ break;
-        case 500: /* Handle */ break;
-      }
     }
-  }, [token])
 
-  const getAlbumTracks = useCallback(async (): Promise<PlaycountTrack[] | undefined> => {
-    try {
-      const tracks: PlaycountTrack[] | [] = []
-
-      // TODO: Since the playlist has been updated, we may want to rethink using static data for finding the tracks
-      trackInfo.map(async (album) => {
-        const response = await fetchWrapper(albumPlayCountBaseUrl + album.album_id)
-        const responseData = await response.json();
-
-        // Check track against Spotify API to make sure it's the right one
-        const track: PlaycountTrack | undefined = responseData['data']['discs'][0]['tracks'].find((trackData: PlaycountTrack) => {
-          return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === album.track_id;
-        })
-
-        if (track) {
-          tracks.push(track);
-        }
-      })
-
-      return tracks;
-    } catch(error) {
-      console.log(error);
-    }
-  }, [])
-
-  const formatTrackData = (allData: [PlaylistTrack[], PlaycountTrack[]]) => {
-    const spotifyData:  PlaylistTrack[] = allData[0];
-    const playcountData: PlaycountTrack[] = allData[1];
-    const data: Array<FormattedTrackData> = [];
-
-    spotifyData.map((playlistTrack: PlaylistTrack) => {
-      const { id, name, artists, popularity } = playlistTrack.track as Track;
-
-      const track: FormattedTrackData = {
-        id: Number(id),
-        name,
-        artist: getArtistNames(artists),
-        popularity,
-        playcount: getTrackPlayCount(id, playcountData)
-      }
-      
-      data.push(track);
-    })
-
-    setFormattedTracks((currentState) => {
-      return [...currentState, ...data] as FormattedTrackData[]
-    });
-
-    return data;
-  }
-
-  useEffect(() => {
     if (!token) {
       fetchToken();
     }

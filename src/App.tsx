@@ -224,6 +224,7 @@ function App() {
             dataset={formattedTracks}
             series={[{ dataKey: 'playcount', valueFormatter }]}
             layout='horizontal'
+            grid={{ vertical: true }}
             slots={{
               itemContent: (props) => {
                 return Tooltip({

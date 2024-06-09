@@ -1,5 +1,7 @@
 import { FormattedTrackData } from "./types";
 import { COLORS } from "./colors";
+import { axisClasses } from '@mui/x-charts/ChartsAxis';
+import { chartsGridClasses } from '@mui/x-charts/ChartsGrid';
 
 export const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : 'unknown' } plays`;
 
@@ -63,6 +65,14 @@ export const chartSetting = {
     '& .MuiChartsAxis-left .MuiChartsAxis-line': {
       stroke: COLORS.OFF_WHITE,
       strokeWidth:0.4
-    }
+    },
+    [`& .${axisClasses.left} .${axisClasses.label}`]: {
+      transform: 'translateX(-10px)',
+    },
+    [`& .${chartsGridClasses.line}`]: {
+      strokeDasharray: '5 3',
+      strokeWidth: 0.5,
+      stroke: COLORS.OFF_WHITE,
+    },
   }
 };

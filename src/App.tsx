@@ -222,7 +222,17 @@ function App() {
               }
             ]}
             dataset={formattedTracks}
-            series={[{ dataKey: 'playcount', valueFormatter }]}
+            series={[
+              {
+                dataKey: 'playcount',
+                valueFormatter,
+                label: 'kendrick'
+              },
+              {
+                dataKey: 'playcount',
+                label: 'drake'
+              }
+            ]}
             layout='horizontal'
             grid={{ vertical: true }}
             slots={{
@@ -235,7 +245,7 @@ function App() {
                   points: props
                 })}
             }}
-            tooltip={{ trigger: 'item' }}           
+            tooltip={{ trigger: 'item' }}
           />
           <p>* based on <a href={playlistTracksUrl}>this</a> Spotify playlist</p>
         </div>

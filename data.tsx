@@ -1,5 +1,4 @@
 import {
-  PlaycountTrackInfo,
   PlaycountAPIResponse
 } from "./src/utils/types";
 
@@ -8,15 +7,6 @@ export const clientSecret: string = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 export const playlistTracksUrl: string = "https://api.spotify.com/v1/playlists/7JHlkZQ9HZ5dgEDZCBeAsW/tracks";
 export const albumPlayCountBaseUrl: string = "https://api.t4ils.dev/albumPlayCount?albumid=";
 export const wikiUrl: string = "https://en.wikipedia.org/wiki/Drake%E2%80%93Kendrick_Lamar_feud";
-
-export const trackInfo: PlaycountTrackInfo[] = [
-  { album_id: "4iqbFIdGOTzXeDtt9owjQn", track_id: "2tudvzsrR56uom6smgOcSf", name: "Like That" },
-  { album_id: "06me0leRR3AuF4IFiEytml", track_id: "3eh51r6rFWAlGQRlHx9QnQ", name: "Push Ups" },
-  { album_id: "32bR4LcEc1PvJEhaKoo4ZN", track_id: "77DRzu7ERs0TX3roZcre7Q", name: "euphoria" },
-  { album_id: "3qwCuSISrIUpyt6sB5edmQ", track_id: "1wFFFzJ5EsKbBWZriAcubN", name: "Family Matters" },
-  { album_id: "5PGH88Cwual1Nj8d2RsKP0", track_id: "4S8PxReB1UiDR2F5x1lyIR", name: "meet the grahams" },
-  { album_id: "5JjnoGJyOxfSZUZtk2rRwZ", track_id: "6AI3ezQ4o3HUoP6Dhudph3", name: "Not Like Us" },
-]
 
 export const dummyData: PlaycountAPIResponse[] = [
   {

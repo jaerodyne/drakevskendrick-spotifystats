@@ -30,23 +30,13 @@ export interface PlaycountAPIResponseData {
 }
 
 export interface Artist {
-  name:  Name;
-  uri:   URI;
+  name:  string;
+  uri:   string;
   image: Cover;
 }
 
 export interface Cover {
   uri: string;
-}
-
-export enum Name {
-  Future = "Future",
-  MetroBoomin = "Metro Boomin",
-}
-
-export enum URI {
-  SpotifyArtist0IEtIxbK0KxaSlF7G42ZOp = "spotify:artist:0iEtIxbK0KxaSlF7G42ZOp",
-  SpotifyArtist1RyvyyTE3XzB2ZywiAwp0I = "spotify:artist:1RyvyyTE3xzB2ZywiAwp0i",
 }
 
 export interface Disc {
@@ -72,7 +62,7 @@ export interface Related {
 }
 
 export interface FormattedTrackData {
-  id: number;
+  id: string;
   name: string;
   artist: string[];
   playcount: number;

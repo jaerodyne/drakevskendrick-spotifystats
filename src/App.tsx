@@ -3,7 +3,6 @@ import {
   FormattedTrackData,
   PlaycountTrack,
   PlaycountAPIResponse,
-  PlaycountAPIResponseData,
 } from './utils/types';
 import { Paging, PlaylistTrack, Track, Episode, Artist, Album } from 'spotify-types';
 import { BarChart } from '@mui/x-charts';
@@ -18,7 +17,6 @@ import {
   clientSecret,
   playlistTracksUrl,
   albumPlayCountBaseUrl,
-  trackInfo,
   wikiUrl,
 } from '../data';
 
@@ -162,7 +160,7 @@ function App() {
         const { id, name, artists } = trackData.track as Track;
 
         const track: FormattedTrackData = {
-          id: Number(id),
+          id,
           name,
           artist: getArtistNames(artists),
           playcount: getTrackPlayCount(id, playcountData)

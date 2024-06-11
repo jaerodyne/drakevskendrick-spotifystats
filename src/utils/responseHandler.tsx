@@ -1,7 +1,11 @@
-class ResponseError extends Error {
-  constructor(message: string, response) {
+export class ResponseError extends Error {
+  response: Response;
+
+  constructor(message: string, response: Response) {
     super(message);
     this.response = response;
+
+    Object.setPrototypeOf(this, ResponseError.prototype);
   }
 }
 

@@ -10,7 +10,7 @@ export interface PlaycountTrackInfo {
 
 export interface PlaycountAPIResponse {
   success: boolean;
-  data: object;
+  data: PlaycountAPIResponseData;
 }
 
 export interface PlaycountAPIResponseData {
@@ -75,7 +75,6 @@ export interface FormattedTrackData {
   id: number;
   name: string;
   artist: string[];
-  popularity: number;
   playcount: number;
 }
 

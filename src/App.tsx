@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import {
   FormattedTrackData,
   PlaycountTrack,
+  PlaycountAPIResponse,
+  PlaycountAPIResponseData,
 } from './utils/types';
 import { Paging, PlaylistTrack, Track, Episode, Artist, Album } from 'spotify-types';
 import { BarChart } from '@mui/x-charts';
@@ -62,8 +64,13 @@ function App() {
     }
   }
 
-  const getTrackPlayCount = (track_id: string, playcountData: PlaycountTrack[]) => {
-    const track: PlaycountTrack | undefined = playcountData.find((trackData) => {
+  const getTrackPlayCount = (track_id: string, playcountData: PlaycountAPIResponse[]) => {
+    const filteredData: PlaycountTrack[] = playcountData
+      .filter((response: PlaycountAPIResponse) => response && response.data)
+      .map((responseData: PlaycountAPIResponse) => responseData.data.discs[0].tracks)
+      .flat();
+
+    const track = filteredData.find((trackData) => {
       return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === track_id
     });
 
@@ -101,6 +108,7 @@ function App() {
               // token has expired, so delete it and get a new one
               localStorage.removeItem('token');
               setToken('');
+              console.log('token expired')
               break;
             case 404: /* Handle */ break;
             case 500: /* Handle */ break;
@@ -109,16 +117,16 @@ function App() {
       }
     }
 
-    const getAlbumTracks = async (playlistTracks: PlaylistTrack[] | undefined): Promise<PromiseSettledResult<Album[]>> => {
-      const getAlbumData = (track: Track | Episode | null) => {
+    const getAlbumTracks = async (albumTracks: PlaylistTrack[] | undefined): Promise<PromiseSettledResult<Album>[]> => {
+      const getAlbumTrackData = (track: Track | Episode | null) => {
         if (track && "album" in track) {
           return track.album;
         }
         return null;
       }
 
-      const promises: Promise<Album>[] | undefined = playlistTracks?.map(async (playlistTrack) => {
-        const album = getAlbumData(playlistTrack.track);
+      const promises: Promise<Album>[] | undefined = albumTracks?.map(async (albumTrack) => {
+        const album = getAlbumTrackData(albumTrack.track);
 
         if (album) {
           try {
@@ -133,31 +141,30 @@ function App() {
         }
       })
 
-      const tracks = await Promise.allSettled(promises);
-      
-      return tracks;
+      // TODO: handle ts errors and revisit returning undefined values
+      return await Promise.allSettled(promises)
+        .then((results) => {
+
+          return [albumTracks, results.map(data => data.value ?? undefined)]
+        })
+        .catch((error) => {
+          console.log(error);
+          throw error;
+        });
     }
 
-    const getTrackPlaycount = (responseData: Response, playlistTrack: PlaylistTrack) => {
-      // Check track against Spotify API to make sure it's the right one
-      return responseData['data']['discs'][0]['tracks'].find((trackData: PlaycountTrack) => {
-        return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === playlistTrack?.track?.id;
-      })
-    }
-
-    const formatTrackData = (allData: [PlaylistTrack[], PlaycountTrack[]]) => {
+    const formatTrackData = (allData: [PlaylistTrack[], PlaycountAPIResponse[]]) => {
       const spotifyData:  PlaylistTrack[] = allData[0];
-      const playcountData: PlaycountTrack[] = allData[1];
-      const data: Array<FormattedTrackData> = [];
+      const playcountData: PlaycountAPIResponse[] = allData[1];
+      const data: FormattedTrackData[] = [];
 
-      spotifyData.map((playlistTrack: PlaylistTrack) => {
-        const { id, name, artists, popularity } = playlistTrack.track as Track;
+      spotifyData.map((trackData: PlaylistTrack) => {
+        const { id, name, artists } = trackData.track as Track;
 
         const track: FormattedTrackData = {
           id: Number(id),
           name,
           artist: getArtistNames(artists),
-          popularity,
           playcount: getTrackPlayCount(id, playcountData)
         }
         
@@ -179,10 +186,11 @@ function App() {
   
     fetchPlaylistTracks()
       .then((data) => {
-        const playcountData = getAlbumTracks(data);
-
-        formatTrackData([playlistTracks, playcountData]);
-      })              
+        return getAlbumTracks(data);
+      })
+      .then((playcountData) => {
+        formatTrackData(playcountData);
+      })
 
   }, [token]);
 

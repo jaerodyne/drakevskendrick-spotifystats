@@ -3,14 +3,14 @@ import {
   FormattedTrackData,
   PlaycountTrack,
 } from './utils/types';
-import { Paging, PlaylistTrack, Track, Artist } from 'spotify-types';
+import { Paging, PlaylistTrack, Track, Episode, Artist, Album } from 'spotify-types';
 import { BarChart } from '@mui/x-charts';
 import { 
   assignColors,
   valueFormatter,
   chartSetting
 } from './utils/barChartStyles';
-import { fetchWrapper } from './utils/responseHandler';
+import { ResponseError, fetchWrapper } from './utils/responseHandler';
 import { 
   clientId,
   clientSecret,
@@ -85,9 +85,6 @@ function App() {
         });
 
         const playlistData: Paging<PlaylistTrack> = await response.json();
-        // Remove 'The Heart Part 6' track since it's not officially released under Drake on Spotify
-        playlistData['items'].pop();
-
         const data: PlaylistTrack[] = playlistData['items'];
 
         setPlaylistTracks((currentState) => {
@@ -97,41 +94,55 @@ function App() {
 
         return data;
       } catch (error) {
-        switch (error.response.status) {
-          case 400: /* Handle */ break;
-          case 401:
-            // token has expired, so delete it and get a new one
-            localStorage.removeItem('token');
-            break;
-          case 404: /* Handle */ break;
-          case 500: /* Handle */ break;
+        if (error instanceof ResponseError) {
+          switch (error.response.status) {
+            case 400: /* Handle */ break;
+            case 401:
+              // token has expired, so delete it and get a new one
+              localStorage.removeItem('token');
+              setToken('');
+              break;
+            case 404: /* Handle */ break;
+            case 500: /* Handle */ break;
+          }
         }
       }
     }
 
-    const getAlbumTracks = async (): Promise<PlaycountTrack[] | undefined> => {
-      try {
-        const tracks: PlaycountTrack[] = []
-
-        // TODO: Since the playlist has been updated, we may want to rethink using static data for finding the tracks
-        trackInfo.map(async (album) => {
-          const response = await fetchWrapper(albumPlayCountBaseUrl + album.album_id)
-          const responseData = await response.json();
-
-          // Check track against Spotify API to make sure it's the right one
-          const track: PlaycountTrack | undefined = responseData['data']['discs'][0]['tracks'].find((trackData: PlaycountTrack) => {
-            return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === album.track_id;
-          })
-
-          if (track) {
-            tracks.push(track);
-          }
-        })
-
-        return tracks;
-      } catch(error) {
-        console.log(error);
+    const getAlbumTracks = async (playlistTracks: PlaylistTrack[] | undefined): Promise<PromiseSettledResult<Album[]>> => {
+      const getAlbumData = (track: Track | Episode | null) => {
+        if (track && "album" in track) {
+          return track.album;
+        }
+        return null;
       }
+
+      const promises: Promise<Album>[] | undefined = playlistTracks?.map(async (playlistTrack) => {
+        const album = getAlbumData(playlistTrack.track);
+
+        if (album) {
+          try {
+            //  get album data from playcount API
+            const response = await fetchWrapper(albumPlayCountBaseUrl + album.id)
+            const responseData = await response.json();
+
+            return responseData;
+          } catch(error) {
+            console.log(error);
+          }
+        }
+      })
+
+      const tracks = await Promise.allSettled(promises);
+      
+      return tracks;
+    }
+
+    const getTrackPlaycount = (responseData: Response, playlistTrack: PlaylistTrack) => {
+      // Check track against Spotify API to make sure it's the right one
+      return responseData['data']['discs'][0]['tracks'].find((trackData: PlaycountTrack) => {
+        return trackData['uri'].slice(trackData['uri'].lastIndexOf(':') +1 ) === playlistTrack?.track?.id;
+      })
     }
 
     const formatTrackData = (allData: [PlaylistTrack[], PlaycountTrack[]]) => {
@@ -157,6 +168,8 @@ function App() {
         return [...currentState, ...data] as FormattedTrackData[]
       });
 
+      setIsLoading(false);
+
       return data;
     }
 
@@ -164,21 +177,13 @@ function App() {
       fetchToken();
     }
   
-    Promise.all(
-      [
-        fetchPlaylistTracks(), 
-        getAlbumTracks()
-      ]
-    )
-    .then((allData: [PlaylistTrack[], PlaycountTrack[]]) => {
-      formatTrackData(allData);
-    })
-    .then(() => {
-      setIsLoading(false);
-    })
-    .catch((error) => {
-      console.error(error.message);
-    });
+    fetchPlaylistTracks()
+      .then((data) => {
+        const playcountData = getAlbumTracks(data);
+
+        formatTrackData([playlistTracks, playcountData]);
+      })              
+
   }, [token]);
 
   if (isLoading) {

@@ -27,7 +27,7 @@ import Tooltip from './components/Tooltip';
 import './App.css';
 
 function App() {
-  const [token, setToken] = useState<string>(localStorage.getItem('token') || "");
+  const [token, setToken] = useState<string>("");
   const [playlistTracks, setPlaylistTracks] = useState<PlaylistTrack[] | []>([]);
   const [formattedTracks, setFormattedTracks] = useState<FormattedTrackData[] | []>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -193,7 +193,12 @@ function App() {
   }, [token]);
 
   if (isLoading) {
-    return <h2>Loading...</h2>
+    return (
+      <>
+        <div className="rotate">🥩</div>
+        <h2>Loading...</h2>
+      </>
+    )
   }
 
   return (

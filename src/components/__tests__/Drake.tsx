@@ -1,12 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import Drake from '../Drake';
-
-// const mockNavigate = vi.fn()
-// vi.mock('react-router-dom', async () => ({
-// 	...(await vi.importActual<typeof ReactRouterDOM>('react-router-dom')),
-// 	useNavigate: (): typeof mockNavigate => mockNavigate
-// }))
 
 const drakeTrack = {
   "album": {
@@ -118,40 +111,24 @@ const drakeTrack = {
   "track": true
 }
 
-function renderDrake(): void {
-	render(<Drake track={drakeTrack} playcount={0} hideImg={false} />)
+vi.mock("./TrackInfo", () => ({
+    TrackInfo: () => <div data-testid="TrackInfo">TrackInfo</div>,
+}));
+
+function renderDrake() {
+	return render(<Drake track={drakeTrack} playcount={0} hideImg={false} />)
 }
 
 describe('<Drake />', () => {
 	it('renders', () => {
-		renderDrake()
-    screen.getByRole('img', { name: 'drake '})
-		).toBeInTheDocument()
-		expect(
-			screen.getByRole('link', { name: 'Matheus Cenali' })
-		).toBeInTheDocument()
-		expect(screen.getByText('on')).toBeInTheDocument()
-		expect(screen.getByRole('link', { name: 'Unsplash' })).toBeInTheDocument()
+    const { getByAltText } = renderDrake();
+    const image = getByAltText('drake');
+    const imageUrl = '/src/assets/img/drake.jpeg';
+    
+		expect(image).toHaveAttribute('src', imageUrl);
+    
+    const trackInfo = screen.queryByTestId("TrackInfo");
 
-		expect(screen.getByText('Apple')).toBeInTheDocument()
+    expect(trackInfo).not.toBeInTheDocument();
 	})
-	// it('redirect to fruit details page on enter', async () => {
-	// 	renderFruit()
-
-	// 	screen.getByTestId('FruitCard').focus()
-	// 	// No action should be performed
-	// 	await userEvent.keyboard('a')
-	// 	await userEvent.keyboard('[Enter]')
-
-	// 	// eslint-disable-next-line @typescript-eslint/no-magic-numbers
-	// 	expect(mockNavigate).toHaveBeenCalledTimes(1)
-	// 	expect(mockNavigate).toHaveBeenCalledWith('apple')
-	// })
-	// it('redirect to photographer profile page on image attribute link click', async () => {
-	// 	renderFruit()
-
-	// 	await userEvent.click(screen.getByRole('link', { name: 'Matheus Cenali' }))
-
-	// 	expect(mockNavigate).toHaveBeenCalledTimes(0)
-	// })
 })

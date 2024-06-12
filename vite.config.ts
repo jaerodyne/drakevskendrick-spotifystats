@@ -8,7 +8,7 @@ export default defineConfig(() => ({
 		include: ['src/**/__tests__/*'],
 		globals: true,
 		environment: 'jsdom',
-		setupFiles: 'src/setupTests.ts',
+		setupFiles: ["src/setupTests.ts"],
 		clearMocks: true,
 		coverage: {
 			include: ['src/**/*'],

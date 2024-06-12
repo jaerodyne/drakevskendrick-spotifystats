@@ -175,6 +175,8 @@ function App() {
 
       setIsLoading(false);
 
+      console.log(data)
+
       return data;
     }
 

@@ -1,9 +1,10 @@
 import drakeImg from '../assets/img/drake.jpeg';
+import { Track } from 'spotify-types';
 import TrackInfo from './TrackInfo';
 
-const Drake = ({ track, playcount, hideImg }) => {
-  const trackAlbumImage = track?.album?.images[0].url;
-  const trackName = track?.name;
+const Drake = ({ track, playcount, hideImg }: { track?: Track | undefined, playcount: number, hideImg: boolean}) => {
+  const trackAlbumImage = track?.album?.images[0].url || "";
+  const trackName = track?.name || "";
   const artistName = track?.artists?.map((artist) => artist.name.toLowerCase()).join(", ") || "";
 
   return (

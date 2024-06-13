@@ -25,6 +25,7 @@ import Kendrick from './components/Kendrick';
 import Tooltip from './components/Tooltip';
 
 import './App.css';
+import { COLORS } from './utils/colors';
 
 function App() {
   const [token, setToken] = useState<string | null>('');
@@ -246,11 +247,13 @@ function App() {
               {
                 dataKey: 'playcount',
                 valueFormatter,
-                label: 'kendrick'
+                label: 'kendrick',
+                color: COLORS.RED
               },
               {
                 dataKey: 'playcount',
-                label: 'drake'
+                label: 'drake',
+                color: COLORS.BLUE
               }
             ]}
             layout='horizontal'

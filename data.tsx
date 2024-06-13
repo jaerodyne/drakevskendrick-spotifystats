@@ -1,6 +1,6 @@
-import { Track } from "spotify-types";
 import {
-  PlaycountAPIResponse
+  PlaycountAPIResponse,
+  SimplifiedArtistsTrack
 } from "./src/utils/types";
 
 export const clientId: string = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
@@ -1448,8 +1448,7 @@ export const spotifyDummyData: object = {
   "uri": "spotify:playlist:7JHlkZQ9HZ5dgEDZCBeAsW",
   "primary_color": null
 }
-
-export const drakeAlbumTrackData: Track = {
+export const drakeAlbumTrackData: SimplifiedArtistsTrack = {
   "album": {
     "album_type": "album",
     "total_tracks": 17,
@@ -1502,7 +1501,8 @@ export const drakeAlbumTrackData: Track = {
         "uri": "spotify:artist:0iEtIxbK0KxaSlF7G42ZOp"
       }
     ],
-    "is_playable": true
+    "is_playable": true,
+    "restrictions": []
   },
   "artists": [
     {
@@ -1558,5 +1558,6 @@ export const drakeAlbumTrackData: Track = {
   "uri": "spotify:track:2tudvzsrR56uom6smgOcSf",
   "is_local": false,
   "episode": false,
-  "track": true
+  "track": true,
+  "restrictions": [],
 }

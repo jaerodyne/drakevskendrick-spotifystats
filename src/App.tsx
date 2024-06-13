@@ -27,7 +27,7 @@ import Tooltip from './components/Tooltip';
 import './App.css';
 
 function App() {
-  const [token, setToken] = useState<string>("");
+  const [token, setToken] = useState<string | null>(null);
   const [playlistTracks, setPlaylistTracks] = useState<PlaylistTrack[] | []>([]);
   const [formattedTracks, setFormattedTracks] = useState<FormattedTrackData[] | []>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -180,7 +180,9 @@ function App() {
       return data;
     }
 
-    if (!token) {
+    if (localStorage.getItem("token")) {
+      setToken(localStorage.getItem("token"))
+    } else {
       fetchToken();
     }
   

@@ -19,7 +19,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["vite/client", "vitest/globals", "vite-plugin-pwa/client"]
+    "types": ["vite/client", "vitest/globals"]
   },
   "include": ["src", "vite-env.d.ts", "data.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }],

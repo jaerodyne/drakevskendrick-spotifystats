@@ -27,7 +27,7 @@ import Tooltip from './components/Tooltip';
 import './App.css';
 
 function App() {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>('');
   const [playlistTracks, setPlaylistTracks] = useState<PlaylistTrack[] | []>([]);
   const [formattedTracks, setFormattedTracks] = useState<FormattedTrackData[] | []>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -85,7 +85,7 @@ function App() {
         const response: Response = await fetchWrapper(playlistTracksUrl, {
           method: 'GET',
           headers: {
-            Authorization: `Bearer  ${JSON.parse(token)['access_token']}`
+            Authorization: `Bearer  ${JSON.parse(token!)['access_token']}`
           }
         });
 

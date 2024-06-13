@@ -91,7 +91,7 @@ export interface PlaycountCounterProps {
 
 export interface TooltipProps {
   playlistTracks: PlaylistTrack[];
-  setCurrentTrack: Dispatch<React.SetStateAction<Track>>;
+  setCurrentTrack: Dispatch<React.SetStateAction<Track | undefined>>;
   setHideImg: Dispatch<React.SetStateAction<boolean>>;
   setCurrentPlaycount: Dispatch<React.SetStateAction<number>>;
   points: ChartsItemContentProps;

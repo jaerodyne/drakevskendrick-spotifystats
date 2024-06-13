@@ -210,11 +210,12 @@ function App() {
     <div className='container'>
       <div className='row header'>
         <h1>if these bars could talk</h1>
-        <h2>
+        <h2>(by spotify playcount)</h2>
+        <h3>
           <a href={wikiUrl}>
-            (drake vs. kendrick rap beef 🥩 Mar 22, 2024 - present)
+            drake vs. kendrick rap beef 🥩 Mar 22, 2024 - present
           </a>
-        </h2>
+        </h3>
       </div>
       <div className='row'>
         <div className='img-container'>
@@ -270,7 +271,7 @@ function App() {
             }}
             tooltip={{ trigger: 'item' }}
           />
-          <p>* based on <a href={playlistTracksUrl}>this</a> Spotify playlist</p>
+          <p className="chart-footnote">* based on <span><a href={playlistTracksUrl}>this</a></span> Spotify playlist</p>
         </div>
       </div>
       <hr style={{width: '100%', marginTop: '1rem'}} />

@@ -22,7 +22,7 @@ export const assignColors = (tracks: FormattedTrackData[]) => {
 export const chartSetting = {
   xAxis: [
     {
-      label: 'plays',
+      label: 'plays*',
     },
   ],
   width: 700,

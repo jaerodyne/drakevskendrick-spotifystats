@@ -132,3 +132,24 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+@media only screen and (max-width: 499px) { 
+  .img-container {
+    width: 100%;
+  }
+  .bar-chart {
+    width: 100%;
+  }
+  .row {
+    flex-direction: column;
+  }
+  .header {
+    width: 100%;
+  }
+  .track-info {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+}

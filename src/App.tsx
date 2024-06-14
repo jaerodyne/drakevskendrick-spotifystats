@@ -77,7 +77,7 @@ function App() {
   }
 
   const getArtistNames = (artists: Artist[]) => {
-    return artists.map((artist) => artist.name)
+    return artists.map((artist) => artist?.name?.toLowerCase()).join(", ") || "";
   }
 
   useEffect(() => {
@@ -163,10 +163,10 @@ function App() {
         const track: FormattedTrackData = {
           id,
           name,
-          artist: getArtistNames(artists),
+          artist: artists.length ? getArtistNames(artists) : "drake",
           playcount: getTrackPlayCount(id, playcountData)
         }
-        
+        console.log(track)
         data.push(track);
       })
 

@@ -64,7 +64,7 @@ export interface Related {
 export interface FormattedTrackData {
   id: string;
   name: string;
-  artist: string[];
+  artist: string;
   playcount: number;
 }
 

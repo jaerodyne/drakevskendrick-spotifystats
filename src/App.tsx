@@ -244,6 +244,21 @@ function App() {
               }
             ]}
             dataset={formattedTracks}
+            slotProps={{
+              legend: {
+                direction: 'row',
+                position: {
+                  vertical: 'top',
+                  horizontal: 'right'
+                },
+                padding: 0,
+                labelStyle: {
+                  fontFamily: 'Bangers',
+                  fontSize: 14,
+                  fill: COLORS.OFF_WHITE,
+                },
+              }
+            }}
             series={[
               {
                 dataKey: 'playcount',
@@ -253,6 +268,7 @@ function App() {
               },
               {
                 dataKey: 'playcount',
+                valueFormatter,
                 label: 'drake',
                 color: COLORS.BLUE
               }

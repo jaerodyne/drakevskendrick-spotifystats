@@ -29,21 +29,6 @@ export const chartSetting = {
     top: 50,
     bottom: 50,
   },
-  slotProps: {
-    legend: {
-      direction: 'row',
-      position: {
-        vertical: 'top',
-        horizontal: 'right'
-      },
-      padding: 0,
-      labelStyle: {
-        fontFamily: 'Bangers',
-        fontSize: 14,
-        fill: COLORS.OFF_WHITE,
-      },
-    },
-  },
  sx: {
     padding: '1rem',
     // grid lines

@@ -61,7 +61,7 @@ export interface Related {
   releases: string[];
 }
 
-export interface FormattedTrackData {
+export type FormattedTrackData = {
   id: string;
   name: string;
   artist: string;

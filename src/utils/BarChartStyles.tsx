@@ -62,7 +62,7 @@ export const chartSetting = {
       fill: COLORS.OFF_WHITE,
       fontFamily: 'Bangers',
       marginTop: '1rem',
-      fontSize: '1.5rem'
+      fontSize: '1.2rem'
     },
     // leftAxis Line Styles
      [`& .${axisClasses.left} .${axisClasses.line}`]: {

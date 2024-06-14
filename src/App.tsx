@@ -233,6 +233,13 @@ function App() {
         <div className='bar-chart'>
           <BarChart
             {...chartSetting}
+            barLabel={(item) => {
+              console.log(item)
+              if (item.value === 0) {
+                return 'no data available';
+              }
+              return valueFormatter(item.value);
+            }}
             yAxis={[
               {
                 scaleType: 'band',

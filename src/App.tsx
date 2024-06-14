@@ -238,7 +238,7 @@ function App() {
               if (item.value === 0) {
                 return 'no data available';
               }
-              return valueFormatter(item.value);
+              return "";
             }}
             yAxis={[
               {

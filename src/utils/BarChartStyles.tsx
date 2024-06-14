@@ -3,7 +3,7 @@ import { COLORS } from "./colors";
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
 import { chartsGridClasses } from '@mui/x-charts/ChartsGrid';
 
-export const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : 'unknown' } plays`;
+export const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : 'unknown' }`;
 
 export const assignColors = (tracks: FormattedTrackData[]) => {
   const colors: string[] = [];

@@ -13,7 +13,7 @@ export interface PlaycountAPIResponse {
   data: PlaycountAPIResponseData;
 }
 
-export interface PlaycountAPIResponseData {
+interface PlaycountAPIResponseData {
   uri:         string;
   name:        string;
   cover:       Cover;

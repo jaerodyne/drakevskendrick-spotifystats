@@ -1,7 +1,7 @@
 import {
   PlaycountAPIResponse,
   SimplifiedArtistsTrack
-} from "./src/utils/types";
+} from "./src/utils/Types";
 
 export const clientId: string = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 export const clientSecret: string = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;

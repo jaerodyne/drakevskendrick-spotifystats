@@ -1,4 +1,4 @@
-import { COLORS } from "../utils/colors";
+import { COLORS } from "../utils/Colors";
 import PlaycountCounter from "./PlaycountCounter";
 
 const TrackInfo = ({ artistName, trackAlbumImage, trackName, playcount }) => {

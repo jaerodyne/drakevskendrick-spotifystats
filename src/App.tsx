@@ -3,15 +3,15 @@ import {
   FormattedTrackData,
   PlaycountTrack,
   PlaycountAPIResponse,
-} from './utils/types';
+} from './utils/Types';
 import { Paging, PlaylistTrack, Track, Episode, Artist } from 'spotify-types';
 import { BarChart } from '@mui/x-charts';
 import { 
   assignColors,
   valueFormatter,
   chartSetting
-} from './utils/barChartStyles';
-import { ResponseError, fetchWrapper } from './utils/responseHandler';
+} from './utils/BarChartStyles';
+import { ResponseError, fetchWrapper } from './utils/ResponseHandler';
 import { 
   clientId,
   clientSecret,
@@ -25,7 +25,7 @@ import Kendrick from './components/Kendrick';
 import Tooltip from './components/Tooltip';
 
 import './App.css';
-import { COLORS } from './utils/colors';
+import { COLORS } from './utils/Colors';
 
 function App() {
   const [token, setToken] = useState<string | null>('');

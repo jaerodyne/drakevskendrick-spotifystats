@@ -1,5 +1,5 @@
-import { FormattedTrackData } from "./types";
-import { COLORS } from "./colors";
+import { FormattedTrackData } from "./Types";
+import { COLORS } from "./Colors";
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
 import { chartsGridClasses } from '@mui/x-charts/ChartsGrid';
 

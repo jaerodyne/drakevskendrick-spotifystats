@@ -1,4 +1,4 @@
-import { TooltipProps } from "../utils/types";
+import { TooltipProps } from "../utils/Types";
 
 const Tooltip = (formattedData: TooltipProps) => {
   const { points: { itemData: { dataIndex }, series: { data }} } = formattedData;

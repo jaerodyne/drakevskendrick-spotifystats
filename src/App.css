@@ -85,6 +85,11 @@
   margin-left: 0.6rem;
 }
 
+.bar-chart {
+  width: 700px;
+  height: 500px;
+}
+
 .chart-footnote {
   display: flex;
   justify-content: right;
@@ -134,7 +139,8 @@
     width: 100%;
   }
   .bar-chart {
-    width: 100%;
+    width: 550px;
+    height: 300px;
   }
   .row {
     flex-direction: column;

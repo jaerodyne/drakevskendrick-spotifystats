@@ -17,7 +17,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  width: 95vw;
+  width: var(--fluid-width);
   margin: 0 auto;
   max-width: var(--max-width);
   text-align: center;
@@ -30,11 +30,7 @@
   margin: 0 auto;
 }
 
-.header h1 {
-  margin-bottom: 0;
-}
-
-.header h2 {
+.header h1, h2 {
   margin-top: 0;
   margin-bottom: 0;
 }

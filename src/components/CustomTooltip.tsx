@@ -16,7 +16,7 @@ const CustomTooltip = (formattedData: TooltipProps) => {
     }
 
     formattedData.setCurrentTrack(track)
-    formattedData.setCurrentPlaycount(playcount)
+    formattedData.setCurrentPlaycount(playcount as number)
     formattedData.setHideImg(true)
   }
 

@@ -19,7 +19,7 @@ import {
   valueFormatter,
   chartSetting
 } from './utils/BarChartStyles';
-import { ResponseError, fetchWrapper } from './utils/ResponseHandler';
+import { ResponseError, fetchWrapper } from './utils/ResponseHandlers';
 import { 
   clientId,
   clientSecret,
@@ -142,6 +142,8 @@ function App() {
             case 404: /* Handle */ break;
             case 500: /* Handle */ break;
           }
+        } else {
+          console.log(error)
         }
       }
     }

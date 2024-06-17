@@ -1,7 +1,8 @@
 import kendrickImg from "../assets/img/kendrick.jpeg";
+import { SimplifiedArtistsTrack } from 'utils/Types';
 import TrackInfo from "./TrackInfo";
 
-const Kendrick = ({ track, playcount, hideImg }) => {
+const Kendrick = ({ track, playcount, hideImg }: { track?: SimplifiedArtistsTrack | undefined, playcount: number, hideImg: boolean}) => {
   const trackAlbumImage = track?.album?.images[0].url;
   const trackName = track?.name;
   const artistName = track?.artists?.map((artist) => artist.name.toLowerCase()).join(", ") || "";
@@ -11,8 +12,8 @@ const Kendrick = ({ track, playcount, hideImg }) => {
       { artistName.includes('kendrick') &&
         <TrackInfo
           artistName={artistName}
-          trackAlbumImage={trackAlbumImage}
-          trackName={trackName}
+          trackAlbumImage={trackAlbumImage ?? ''}
+          trackName={trackName ?? ''}
           playcount={playcount}
         />
       }

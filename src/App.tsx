@@ -182,7 +182,7 @@ function App() {
     }
 
     const formatTrackData = (allData: [PlaylistTrack[], PlaycountAPIResponse[]]) => {
-      const data: FormattedTrackData[] = [];
+      const data: Set<FormattedTrackData> = new Set();
 
       if (allData) {
         const spotifyData = allData[0];
@@ -198,17 +198,17 @@ function App() {
             playcount: playcountData ? getTrackPlayCount(id, playcountData) : 0
           }
 
-          data.push(track);
+          data.add(track);
         })
       }
 
+      const arrayData = Array.from(data);
+
       setFormattedTracks((currentState) => {
-        return [...currentState, ...data] as FormattedTrackData[]
+        return [...currentState, ...arrayData] as FormattedTrackData[]
       });
 
       setIsLoading(false);
-
-      console.log(data)
 
       return data;
     }
@@ -306,6 +306,7 @@ function App() {
               }
             ]}
             onHighlightChange={(props) => {
+              // TODO: set current track here instead
               console.log(props)
             }}
           >
@@ -336,8 +337,6 @@ function App() {
                 } else {
                   newIndex = item.dataIndex;
                 }
-
-                console.log(item.value, otherSeriesData[newIndex])
 
                 // Generate label only once for each bar label stack
                 if (item.value === 0 &&

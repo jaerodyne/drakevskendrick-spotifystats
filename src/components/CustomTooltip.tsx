@@ -1,6 +1,6 @@
 import { TooltipProps } from "../utils/Types";
 
-const Tooltip = (formattedData: TooltipProps) => {
+const CustomTooltip = (formattedData: TooltipProps) => {
   const { points: { itemData: { dataIndex }, series: { data }} } = formattedData;
   let trackPreviewUrl = "";
 
@@ -20,4 +20,4 @@ const Tooltip = (formattedData: TooltipProps) => {
     </div>
   )
 }
-export default Tooltip;
+export default CustomTooltip;

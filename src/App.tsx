@@ -5,7 +5,15 @@ import {
   PlaycountAPIResponse,
 } from './utils/Types';
 import { Paging, PlaylistTrack, Track, Episode, Artist } from 'spotify-types';
-import { BarChart } from '@mui/x-charts';
+import {
+  ResponsiveChartContainer,
+  BarPlot,
+  ChartsXAxis,
+  ChartsYAxis,
+  ChartsGrid,
+  ChartsLegend,
+  ChartsTooltip
+} from '@mui/x-charts';
 import { 
   assignColors,
   valueFormatter,
@@ -22,7 +30,7 @@ import {
 
 import Drake from './components/Drake';
 import Kendrick from './components/Kendrick';
-import Tooltip from './components/Tooltip';
+import CustomTooltip from './components/CustomTooltip';
 
 import './App.css';
 import { COLORS } from './utils/Colors';
@@ -234,69 +242,93 @@ function App() {
           />
         </div>
         <div className='bar-chart'>
-          <BarChart
+          <ResponsiveChartContainer
             {...chartSetting}
-            barLabel={(item) => {
-              console.log(item)
-              if (item.value === 0) {
-                return 'no data available';
+            dataset={formattedTracks}
+            series={[
+              {
+                type: 'bar',
+                dataKey: 'playcount',
+                layout: 'horizontal',
+                label: 'drake',
+                stack: 'playcount',
+                color: COLORS.BLUE,
+                highlightScope: {
+                  highlight: 'item',
+                  fade: 'global'
+                }
+              },
+              {
+                type: 'bar',
+                dataKey: 'playcount',
+                layout: 'horizontal',
+                label: 'kendrick',
+                stack: 'playcount',
+                color: COLORS.RED,
+                highlightScope: {
+                  highlight: 'item',
+                  fade: 'global'
+                }
               }
-              return "";
-            }}
+            ]}
             yAxis={[
               {
-                scaleType: 'band',
                 dataKey: 'name',
+                scaleType: 'band',
+                id: 'y-axis-id',
                 colorMap: {
                   type: 'ordinal',
                   colors: assignColors(formattedTracks)
                 }
               }
             ]}
-            dataset={formattedTracks}
-            slotProps={{
-              legend: {
-                direction: 'row',
-                position: {
-                  vertical: 'top',
-                  horizontal: 'right'
-                },
-                padding: 0,
-                labelStyle: {
-                  fontFamily: 'Bangers',
-                  fontSize: 14,
-                  fill: COLORS.OFF_WHITE,
-                },
-              }
+            onHighlightChange={(props) => {
+              console.log(props)
             }}
-            series={[
-              {
-                dataKey: 'playcount',
-                valueFormatter,
-                label: 'kendrick',
-                color: COLORS.RED
-              },
-              {
-                dataKey: 'playcount',
-                valueFormatter,
-                label: 'drake',
-                color: COLORS.BLUE
-              }
-            ]}
-            layout='horizontal'
-            grid={{ vertical: true }}
-            slots={{
-              itemContent: (props) => {
-                return Tooltip({
-                  playlistTracks,
-                  setCurrentTrack,
-                  setHideImg,
-                  setCurrentPlaycount,
-                  points: props
-                })}
-            }}
-            tooltip={{ trigger: 'item' }}
-          />
+          >
+            <BarPlot
+              barLabel={(item) => {
+                if (item.value === 0) {
+                  return 'no data available';
+                }
+                return "";
+              }}
+            />
+            <ChartsXAxis label="plays*"/>
+            <ChartsYAxis axisId="y-axis-id" />
+            <ChartsGrid vertical />
+            <ChartsLegend
+              direction='row'
+              position={{
+                vertical: 'top',
+                horizontal: 'right'
+              }}
+              slotProps={{
+                legend: {
+                  padding: 0,
+                  labelStyle: {
+                    fontFamily: 'Bangers',
+                    fontSize: 14,
+                    fill: COLORS.OFF_WHITE,
+                  }
+                }
+              }}
+            />
+            <ChartsTooltip
+              trigger='item'
+              slots={{
+                itemContent: (props) => {
+                  return CustomTooltip({
+                    playlistTracks,
+                    setCurrentTrack,
+                    setHideImg,
+                    setCurrentPlaycount,
+                    points: props
+                  })
+                }
+              }}
+            />
+        </ResponsiveChartContainer>
           <p className="chart-footnote">* based on <span><a href={playlistTracksUrl}>this</a></span> Spotify playlist</p>
         </div>
       </div>

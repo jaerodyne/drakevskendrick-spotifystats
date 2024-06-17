@@ -8,6 +8,7 @@ export const clientSecret: string = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 export const playlistTracksUrl: string = "https://api.spotify.com/v1/playlists/7JHlkZQ9HZ5dgEDZCBeAsW/tracks";
 export const albumPlayCountBaseUrl: string = "https://api.t4ils.dev/albumPlayCount?albumid=";
 export const wikiUrl: string = "https://en.wikipedia.org/wiki/Drake%E2%80%93Kendrick_Lamar_feud";
+export const spotifyPlaylistUrl: string = "https://open.spotify.com/playlist/7JHlkZQ9HZ5dgEDZCBeAsW?si=deb99f5adea04ae5"
 
 export const dummyData: PlaycountAPIResponse[] = [
   {

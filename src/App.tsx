@@ -12,7 +12,7 @@ import {
   ChartsYAxis,
   ChartsGrid,
   ChartsLegend,
-  ChartsTooltip
+  ChartsTooltip,
 } from '@mui/x-charts';
 import { 
   assignColors,
@@ -26,6 +26,7 @@ import {
   playlistTracksUrl,
   albumPlayCountBaseUrl,
   wikiUrl,
+  spotifyPlaylistUrl,
 } from '../data';
 
 import Drake from './components/Drake';
@@ -156,7 +157,6 @@ function App() {
         })
         .catch((error) => {
           console.log(error);
-          throw error;
         });
     }
 
@@ -328,8 +328,8 @@ function App() {
                 }
               }}
             />
-        </ResponsiveChartContainer>
-          <p className="chart-footnote">* based on <span><a href={playlistTracksUrl}>this</a></span> Spotify playlist</p>
+          </ResponsiveChartContainer>
+          <p className="chart-footnote">* based on <span><a href={spotifyPlaylistUrl}>this</a></span> Spotify playlist</p>
         </div>
       </div>
       <hr style={{width: '100%', marginTop: '1rem'}} />

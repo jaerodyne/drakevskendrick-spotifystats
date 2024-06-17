@@ -3,6 +3,7 @@ import {
   FormattedTrackData,
   PlaycountTrack,
   PlaycountAPIResponse,
+  SimplifiedArtistsTrack,
 } from './utils/Types';
 import { Paging, PlaylistTrack, Track, Episode, Artist } from 'spotify-types';
 import {
@@ -41,7 +42,7 @@ function App() {
   const [playlistTracks, setPlaylistTracks] = useState<PlaylistTrack[] | []>([]);
   const [formattedTracks, setFormattedTracks] = useState<FormattedTrackData[] | []>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [currentTrack, setCurrentTrack] = useState<Track | undefined>(undefined);
+  const [currentTrack, setCurrentTrack] = useState<SimplifiedArtistsTrack | undefined>(undefined);
   const [currentPlaycount, setCurrentPlaycount] = useState<number>(0);
   const [hideImg, setHideImg] = useState<boolean>(false);
 

@@ -1,7 +1,7 @@
 import { COLORS } from "../utils/Colors";
 import PlaycountCounter from "./PlaycountCounter";
 
-const TrackInfo = ({ artistName, trackAlbumImage, trackName, playcount }) => {
+const TrackInfo = ({ artistName, trackAlbumImage, trackName, playcount } : { artistName: string, trackAlbumImage: string, trackName: string, playcount: number }) => {
   return (
     <div
       className='track-info'

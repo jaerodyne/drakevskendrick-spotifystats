@@ -5,7 +5,7 @@ const CustomTooltip = (formattedData: TooltipProps) => {
   let trackPreviewUrl = "";
 
   if (dataIndex) {
-    const track = formattedData.playlistTracks[0][dataIndex]?.track;
+    const track = formattedData.playlistTracks?[0][dataIndex]?.track;
     trackPreviewUrl = track?.preview_url;
     const playcount = data[dataIndex];
 

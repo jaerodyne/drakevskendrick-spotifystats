@@ -2,7 +2,6 @@ import { FormattedTrackData } from "./Types";
 import { COLORS } from "./Colors";
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
 import { chartsGridClasses } from '@mui/x-charts/ChartsGrid';
-import { barLabelClasses } from "@mui/x-charts";
 
 export const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : '' }`;
 

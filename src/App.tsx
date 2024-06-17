@@ -89,6 +89,27 @@ function App() {
     return artists.map((artist) => artist?.name?.toLowerCase()).join(", ") || "";
   }
 
+  const getPlaycountData = (data: FormattedTrackData[], artistName: 'kendrick' | 'drake') => {
+    const newData: number[] = [];
+    
+    data.map((track) => {
+      const { artist, playcount } = track;
+      if (artist.length) {
+        if (artist.includes(artistName)) {
+          newData.push(playcount);
+        } else {
+          newData.push(0);
+        }
+      } else {
+        newData.push(0)
+      }
+    })
+
+    console.log(artistName, newData)
+
+    return newData;
+  }
+
   useEffect(() => {
     const fetchPlaylistTracks = async (): Promise<PlaylistTrack[] | undefined> => {
       try {
@@ -248,7 +269,8 @@ function App() {
             series={[
               {
                 type: 'bar',
-                dataKey: 'playcount',
+                data: getPlaycountData(formattedTracks, 'drake'),
+                valueFormatter,
                 layout: 'horizontal',
                 label: 'drake',
                 stack: 'playcount',
@@ -260,7 +282,8 @@ function App() {
               },
               {
                 type: 'bar',
-                dataKey: 'playcount',
+                data: getPlaycountData(formattedTracks, 'kendrick'),
+                valueFormatter,
                 layout: 'horizontal',
                 label: 'kendrick',
                 stack: 'playcount',
@@ -279,7 +302,7 @@ function App() {
                 colorMap: {
                   type: 'ordinal',
                   colors: assignColors(formattedTracks)
-                }
+                },
               }
             ]}
             onHighlightChange={(props) => {
@@ -287,11 +310,43 @@ function App() {
             }}
           >
             <BarPlot
-              barLabel={(item) => {
-                if (item.value === 0) {
-                  return 'no data available';
+              slotProps={{
+                barLabel: {
+                  style: {
+                    fontFamily: 'Bangers',
+                    fontSize: '1.1rem',
+                    fontStyle: 'italic',
+                    fill: COLORS.OFF_WHITE,
+                    transform: 'translateX(4em)'
+                  }
                 }
-                return "";
+              }}
+              barLabel={(item) => {
+                let otherSeriesData;
+                let newIndex;
+
+                if (item.seriesId === 'auto-generated-id-0') {
+                  otherSeriesData = getPlaycountData(formattedTracks, 'kendrick');
+                } else {
+                  otherSeriesData = getPlaycountData(formattedTracks, 'drake');
+                }
+
+                if (item.dataIndex > formattedTracks.length) {
+                  newIndex = item.dataIndex - formattedTracks.length;
+                } else {
+                  newIndex = item.dataIndex;
+                }
+
+                console.log(item.value, otherSeriesData[newIndex])
+
+                // Generate label only once for each bar label stack
+                if (item.value === 0 &&
+                    otherSeriesData[newIndex] === 0 &&
+                    item.seriesId === 'auto-generated-id-0') {
+                      return '😢 no data available';
+                }
+
+                return '';
               }}
             />
             <ChartsXAxis label="plays*"/>

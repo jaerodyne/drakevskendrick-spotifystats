@@ -2,14 +2,15 @@ import { FormattedTrackData } from "./Types";
 import { COLORS } from "./Colors";
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
 import { chartsGridClasses } from '@mui/x-charts/ChartsGrid';
+import { barLabelClasses } from "@mui/x-charts";
 
-export const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : 'unknown' }`;
+export const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : '' }`;
 
 export const assignColors = (tracks: FormattedTrackData[]) => {
   const colors: string[] = [];
 
   tracks.map((track) => {
-    track.artist === 'drake' ? colors.push(COLORS.BLUE) : colors.push(COLORS.RED)
+    track.artist.includes('drake') ? colors.push(COLORS.BLUE) : colors.push(COLORS.RED)
   });
 
   return colors;

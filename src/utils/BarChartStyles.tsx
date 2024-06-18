@@ -3,7 +3,17 @@ import { COLORS } from "./Colors";
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
 import { chartsGridClasses } from '@mui/x-charts/ChartsGrid';
 
-export const valueFormatter = (value: number | null) => `${value ? new Intl.NumberFormat().format(value) : '' }`;
+export const valueFormatter = (value: number | null) => {
+  return value ?
+    new Intl.NumberFormat('en-US', {
+      notation: 'compact',
+      compactDisplay: 'short' // Other option is 'long'
+    }).format(value) : '';
+}
+export const trackNameFormatter = (value: string | null) => {
+  return value && value.length > 30 ?
+    value.substring(0, 20) + '...' : value;
+}
 
 export const assignColors = (tracks: FormattedTrackData[]) => {
   const colors: string[] = [];
@@ -16,13 +26,9 @@ export const assignColors = (tracks: FormattedTrackData[]) => {
 }
 
 export const chartSetting = {
-  xAxis: [
-    {
-      label: 'plays*',
-    },
-  ],
+  width: 700,
   margin: {
-    left: 280,
+    left: 200,
     right: 20,
     top: 50,
     bottom: 50,
@@ -59,8 +65,7 @@ export const chartSetting = {
     [`& .${axisClasses.bottom} .${axisClasses.label} tspan`]: {
       fill: COLORS.OFF_WHITE,
       fontFamily: 'Bangers',
-      marginTop: '1rem',
-      fontSize: '1.2rem'
+      fontSize: '1.1rem'
     },
     // leftAxis Line Styles
      [`& .${axisClasses.left} .${axisClasses.line}`]: {

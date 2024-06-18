@@ -95,7 +95,7 @@ hr {
 }
 
 .bar-chart {
-  width: 100%;
+  width: 700px;
   height: 500px;
 }
 
@@ -172,5 +172,10 @@ hr {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+  }
+
+  .bar-chart {
+    width: 450px;
+    height: 400px;
   }
 }

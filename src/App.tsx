@@ -18,7 +18,8 @@ import {
 import { 
   assignColors,
   valueFormatter,
-  chartSetting
+  chartSetting,
+  trackNameFormatter
 } from './utils/BarChartStyles';
 import { ResponseError, fetchWrapper } from './utils/ResponseHandlers';
 import { 
@@ -273,7 +274,6 @@ function App() {
               {
                 type: 'bar',
                 data: getPlaycountData(formattedTracks, 'drake'),
-                valueFormatter,
                 layout: 'horizontal',
                 label: 'drake',
                 stack: 'playcount',
@@ -286,7 +286,6 @@ function App() {
               {
                 type: 'bar',
                 data: getPlaycountData(formattedTracks, 'kendrick'),
-                valueFormatter,
                 layout: 'horizontal',
                 label: 'kendrick',
                 stack: 'playcount',
@@ -314,6 +313,7 @@ function App() {
             }}
           >
             <BarPlot
+              loading={true}
               slotProps={{
                 barLabel: {
                   style: {
@@ -351,8 +351,8 @@ function App() {
                 return '';
               }}
             />
-            <ChartsXAxis label="plays*"/>
-            <ChartsYAxis axisId="y-axis-id" />
+            <ChartsXAxis label='M = plays in millions*' valueFormatter={valueFormatter} />
+            <ChartsYAxis valueFormatter={trackNameFormatter} axisId='y-axis-id' />
             <ChartsGrid vertical />
             <ChartsLegend
               direction='row'

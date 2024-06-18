@@ -21,8 +21,6 @@ export const chartSetting = {
       label: 'plays*',
     },
   ],
-  width: 700,
-  height: 500,
   margin: {
     left: 280,
     right: 20,

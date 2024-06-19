@@ -43,7 +43,7 @@ function App() {
   const [playlistTracks, setPlaylistTracks] = useState<PlaylistTrack[] | []>([]);
   const [formattedTracks, setFormattedTracks] = useState<FormattedTrackData[] | []>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [currentTrack, setCurrentTrack] = useState<SimplifiedArtistsTrack | undefined>(undefined);
+  const [currentTrack, setCurrentTrack] = useState<FormattedTrackData | undefined>(undefined);
   const [currentPlaycount, setCurrentPlaycount] = useState<number>(0);
   const [hideImg, setHideImg] = useState<boolean>(false);
 
@@ -106,8 +106,6 @@ function App() {
         newData.push(0)
       }
     })
-
-    console.log(artistName, newData)
 
     return newData;
   }
@@ -193,13 +191,15 @@ function App() {
         const playcountData = allData[1];
 
         spotifyData?.map((trackData: PlaylistTrack) => {
-          const { id, name, artists } = trackData.track as Track;
+          const { id, name, artists, preview_url, album } = trackData.track as Track;
 
           const track: FormattedTrackData = {
             id,
             name,
-            artist: artists.length ? getArtistNames(artists) : "drake",
-            playcount: playcountData ? getTrackPlayCount(id, playcountData) : 0
+            artist: artists.length ? getArtistNames(artists) : 'drake',
+            playcount: playcountData ? getTrackPlayCount(id, playcountData) : 0,
+            preview_url: preview_url ?? '',
+            album_image_url: album?.images[0]?.url ?? ''
           }
 
           data.add(track);
@@ -307,13 +307,17 @@ function App() {
                 },
               }
             ]}
-            onHighlightChange={(props) => {
-              // TODO: set current track here instead
-              console.log(props)
+            onHighlightChange={(props) => {              
+              if (props && props.dataIndex) {
+                const track = formattedTracks[props.dataIndex]
+                console.log(track)
+                setCurrentTrack(track)
+                setCurrentPlaycount(track.playcount)
+                setHideImg(true)
+              }
             }}
           >
             <BarPlot
-              loading={true}
               slotProps={{
                 barLabel: {
                   style: {
@@ -351,8 +355,8 @@ function App() {
                 return '';
               }}
             />
-            <ChartsXAxis label='M = plays in millions*' valueFormatter={valueFormatter} />
-            <ChartsYAxis valueFormatter={trackNameFormatter} axisId='y-axis-id' />
+            <ChartsXAxis label='m = plays in millions*' valueFormatter={valueFormatter} />
+            <ChartsYAxis label='track name' valueFormatter={trackNameFormatter} axisId='y-axis-id' />
             <ChartsGrid vertical />
             <ChartsLegend
               direction='row'
@@ -376,10 +380,7 @@ function App() {
               slots={{
                 itemContent: (props) => {
                   return CustomTooltip({
-                    playlistTracks,
-                    setCurrentTrack,
-                    setHideImg,
-                    setCurrentPlaycount,
+                    currentTrack,
                     points: props
                   })
                 }

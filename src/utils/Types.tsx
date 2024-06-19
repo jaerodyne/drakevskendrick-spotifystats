@@ -66,6 +66,8 @@ export type FormattedTrackData = {
   name: string;
   artist: string;
   playcount: number;
+  preview_url: string;
+  album_image_url: string;
 }
 
 interface PlayableAlbum extends SimplifiedAlbum {
@@ -90,9 +92,6 @@ export interface PlaycountCounterProps {
 }
 
 export interface TooltipProps {
-  playlistTracks: PlaylistTrack[];
-  setCurrentTrack: Dispatch<React.SetStateAction<SimplifiedArtistsTrack | undefined>>;
-  setHideImg: Dispatch<React.SetStateAction<boolean>>;
-  setCurrentPlaycount: Dispatch<React.SetStateAction<number>>;
+  currentTrack: FormattedTrackData | undefined;
   points: ChartsItemContentProps;
 }

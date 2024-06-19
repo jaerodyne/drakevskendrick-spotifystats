@@ -1,11 +1,11 @@
 import kendrickImg from "../assets/img/kendrick.jpeg";
-import { SimplifiedArtistsTrack } from 'utils/Types';
+import { FormattedTrackData } from 'utils/Types';
 import TrackInfo from "./TrackInfo";
 
-const Kendrick = ({ track, playcount, hideImg }: { track?: SimplifiedArtistsTrack | undefined, playcount: number, hideImg: boolean}) => {
-  const trackAlbumImage = track?.album?.images[0].url;
-  const trackName = track?.name;
-  const artistName = track?.artists?.map((artist) => artist.name.toLowerCase()).join(", ") || "";
+const Kendrick = ({ track, playcount, hideImg }: { track?: FormattedTrackData | undefined, playcount: number, hideImg: boolean}) => {
+  const trackAlbumImage = track?.album_image_url ?? '';
+  const trackName = track?.name ?? '';
+  const artistName = track?.artist ?? '';
 
   return (
     <>
@@ -21,7 +21,7 @@ const Kendrick = ({ track, playcount, hideImg }: { track?: SimplifiedArtistsTrac
         src={kendrickImg}
         alt='kendrick'
         className='img'
-        style={{display: artistName === 'drake' && hideImg ? 'none' : 'block' }}
+        style={{display: artistName.includes('drake') && hideImg ? 'none' : 'block' }}
       />
     </>
   )

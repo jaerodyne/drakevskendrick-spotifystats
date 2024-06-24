@@ -28,7 +28,6 @@ import {
   albumPlayCountBaseUrl,
   wikiUrl,
   spotifyPlaylistUrl,
-  dummyData,
 } from '../data';
 
 import ArtistInfo from './components/ArtistInfo';
@@ -176,7 +175,7 @@ function App() {
     }
 
     const formatTrackData = (allData: [PlaylistTrack[], PlaycountAPIResponse[]]) => {
-      const data: Set<FormattedTrackData> = new Set();
+      const data: FormattedTrackData[] = [];
 
       if (allData) {
         const spotifyData = allData[0];
@@ -194,15 +193,11 @@ function App() {
             album_image_url: album?.images[0]?.url ?? ''
           }
 
-          data.add(track);
+          data.push(track);
         })
       }
 
-      const arrayData = Array.from(data);
-
-      setFormattedTracks((currentState) => {
-        return [...currentState, ...arrayData] as FormattedTrackData[]
-      });
+      setFormattedTracks(data);
 
       console.log(formattedTracks)
 

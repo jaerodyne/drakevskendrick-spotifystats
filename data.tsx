@@ -1572,3 +1572,85 @@ export const drakeArtistInfoTrackData: FormattedTrackData = {
   "preview_url": '',
   "album_image_url": "https://i.scdn.co/image/ab67616d0000b273a0ac23f4b446a7264e67bf0e",
 }
+
+export const dummyFormattedTrackData: FormattedTrackData[] = [
+  { "album_image_url": "https://i.scdn.co/image/ab67616d0000b2737d384516b23347e92a587ed1",
+    "artist": "drake, j. cole",
+    "playcount": 333321316,
+    "id": "7aqfrAY2p9BUSiupwk3svU",
+    "name": "First Person Shooter (feat. J. Cole)",
+    "preview_url": ""
+  },
+  { 
+    "album_image_url": "https://i.scdn.co/image/ab67616d0000b273a46b07c291e6dfdee13b3ee8",
+    "artist": "future, metro boomin, kendrick lamar",
+    "playcount": 377393192,
+    "id": "2tudvzsrR56uom6smgOcSf",
+    "name": "Like That",
+    "preview_url": "https://p.scdn.co/mp3-preview/793f43da71fe668c35b72a38ae7f93e783823e17?cid=f1a305a19e26462180e33010e053f276"
+  },
+  { 
+    "album_image_url": "https://i.scdn.co/image/ab67616d0000b27384bfd0d363f0179ac7c97fa5",
+    "artist": "drake",
+    "playcount": 113863097,
+    "id": "3eh51r6rFWAlGQRlHx9QnQ",
+    "name": "Push Ups",
+    "preview_url": ""
+  },
+  { 
+    "album_image_url": "https://i.scdn.co/image/ab6765630000ba8ae19abedcca9ca896bc780eda",
+    "artist": "",
+    "playcount": 0,
+    "id": "5uOKVVW9qGBc7rzaH7xD2r",
+    "name": "Drake Taylor Made Freestyle ",
+    "preview_url": "https://podz-content.spotifycdn.com/audio/clips/7I6QFrP6SccABBlCleOP1l/clip_102438_162438.mp3"
+  },
+  { 
+    "album_image_url": "https://i.scdn.co/image/ab67616d0000b2737587213b1be294ac4000f648",
+    "artist": "kendrick lamar",
+    "playcount": 183678802,
+    "id": "77DRzu7ERs0TX3roZcre7Q",
+    "name": "euphoria",
+    "preview_url": ""
+  },
+  { 
+    "album_image_url": "https://i.scdn.co/image/ab6765630000ba8ae19abedcca9ca896bc780eda",
+    "artist": "",
+    "playcount": 0,
+    "id": "0qTervLQMJkFoclkuUtwJP",
+    "name": "6:16 in Los Angeles (Drake Diss)",
+    "preview_url": "https://podz-content.spotifycdn.com/audio/clips/3VAQCkMDtFWVzWNRu2ipij/clip_134360_179800.mp3"
+  },
+  { 
+    "album_image_url": "https://i.scdn.co/image/ab67616d0000b273a0ac23f4b446a7264e67bf0e",
+    "artist": "drake",
+    "playcount": 78625289,
+    "id": "1wFFFzJ5EsKbBWZriAcubN",
+    "name": "Family Matters",
+    "preview_url": "" 
+  },
+  { 
+    "album_image_url": "https://i.scdn.co/image/ab67616d0000b273ba8b74f6b8523c328be1bdd2",
+    "artist": "kendrick lamar",
+    "playcount": 71579857,
+    "id": "4S8PxReB1UiDR2F5x1lyIR",
+    "name": "meet the grahams",
+    "preview_url": ""
+  },
+  { 
+    "album_image_url": "https://i.scdn.co/image/ab67616d0000b2731ea0c62b2339cbf493a999ad",
+    "artist": "kendrick lamar",
+    "playcount": 375258033,
+    "id": "6AI3ezQ4o3HUoP6Dhudph3",
+    "name": "Not Like Us",
+    "preview_url": ""
+  },
+  {
+    "album_image_url": "https://i.scdn.co/image/ab6765630000ba8ae19abedcca9ca896bc780eda",
+    "artist": "",
+    "playcount": 0,
+    "id": "7D8RE1jCpg8L6mm0TOEkkh",
+    "name": "Drake - The Heart (Kendrick Lamar Diss)",
+    "preview_url": "https://podz-content.spotifycdn.com/audio/clips/7qwmlQwRpcoX5fTbf6DXoz/clip_244239_302400.mp3"
+  }
+]

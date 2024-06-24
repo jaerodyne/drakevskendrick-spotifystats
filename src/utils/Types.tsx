@@ -1,6 +1,5 @@
-import { Dispatch } from "react";
 import { ChartsItemContentProps } from "@mui/x-charts";
-import { Track, PlaylistTrack, SimplifiedArtist, SimplifiedAlbum } from "spotify-types";
+import { Track, SimplifiedArtist, SimplifiedAlbum } from "spotify-types";
 
 export interface PlaycountTrackInfo {
   album_id: string;
@@ -81,10 +80,16 @@ export interface SimplifiedArtistsTrack extends Omit<Track, 'album' | 'artists'>
   track: boolean;
 }
 
-export interface ArtistProps {
-  track: Track | object;
-  playcount: number;
+export interface ArtistInfoProps {
+  track: FormattedTrackData | undefined;
   hideImg: boolean;
+}
+
+export interface TrackInfoProps {
+  artistName: string;
+  trackAlbumImage: string;
+  trackName: string;
+  playcount: number;
 }
 
 export interface PlaycountCounterProps {

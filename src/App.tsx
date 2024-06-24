@@ -3,7 +3,6 @@ import {
   FormattedTrackData,
   PlaycountTrack,
   PlaycountAPIResponse,
-  SimplifiedArtistsTrack,
 } from './utils/Types';
 import { Paging, PlaylistTrack, Track, Episode, Artist } from 'spotify-types';
 import {
@@ -29,10 +28,10 @@ import {
   albumPlayCountBaseUrl,
   wikiUrl,
   spotifyPlaylistUrl,
+  dummyData,
 } from '../data';
 
-import Drake from './components/Drake';
-import Kendrick from './components/Kendrick';
+import ArtistInfo from './components/ArtistInfo';
 import CustomTooltip from './components/CustomTooltip';
 
 import './App.css';
@@ -40,11 +39,9 @@ import { COLORS } from './utils/Colors';
 
 function App() {
   const [token, setToken] = useState<string | null>('');
-  const [playlistTracks, setPlaylistTracks] = useState<PlaylistTrack[] | []>([]);
   const [formattedTracks, setFormattedTracks] = useState<FormattedTrackData[] | []>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentTrack, setCurrentTrack] = useState<FormattedTrackData | undefined>(undefined);
-  const [currentPlaycount, setCurrentPlaycount] = useState<number>(0);
   const [hideImg, setHideImg] = useState<boolean>(false);
 
   const fetchToken = async () => {
@@ -122,11 +119,6 @@ function App() {
 
         const playlistData: Paging<PlaylistTrack> = await response.json();
         const data: PlaylistTrack[] = playlistData['items'];
-
-        setPlaylistTracks((currentState) => {
-          const newState = [...currentState, data ] as PlaylistTrack[]; 
-          return newState;
-        });
 
         return data;
       } catch (error) {
@@ -212,7 +204,7 @@ function App() {
         return [...currentState, ...arrayData] as FormattedTrackData[]
       });
 
-      setIsLoading(false);
+      console.log(formattedTracks)
 
       return data;
     }
@@ -229,6 +221,7 @@ function App() {
       })
       .then((playcountData) => {
         formatTrackData(playcountData as [PlaylistTrack[],  PlaycountAPIResponse[]]);
+        setIsLoading(false);
       })
 
   }, [token]);
@@ -255,14 +248,8 @@ function App() {
       </div>
       <div className='row'>
         <div className='img-container'>
-          <Drake
+          <ArtistInfo
             track={currentTrack}
-            playcount={currentPlaycount}
-            hideImg={hideImg}
-          />
-          <Kendrick
-            track={currentTrack}
-            playcount={currentPlaycount}
             hideImg={hideImg}
           />
         </div>
@@ -312,7 +299,6 @@ function App() {
                 const track = formattedTracks[props.dataIndex]
                 console.log(track)
                 setCurrentTrack(track)
-                setCurrentPlaycount(track.playcount)
                 setHideImg(true)
               }
             }}
@@ -356,7 +342,7 @@ function App() {
               }}
             />
             <ChartsXAxis label='m = plays in millions*' valueFormatter={valueFormatter} />
-            <ChartsYAxis label='track name' valueFormatter={trackNameFormatter} axisId='y-axis-id' />
+            <ChartsYAxis valueFormatter={trackNameFormatter} axisId='y-axis-id' />
             <ChartsGrid vertical />
             <ChartsLegend
               direction='row'

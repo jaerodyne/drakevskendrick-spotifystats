@@ -1,12 +1,13 @@
+import { TrackInfoProps } from "utils/Types";
 import { COLORS } from "../utils/Colors";
 import PlaycountCounter from "./PlaycountCounter";
 
-const TrackInfo = ({ artistName, trackAlbumImage, trackName, playcount } : { artistName: string, trackAlbumImage: string, trackName: string, playcount: number }) => {
+const TrackInfo = ({ artistName, trackAlbumImage, trackName, playcount } : TrackInfoProps ) => {
   return (
     <div
       className='track-info'
       style={{
-        backgroundColor: artistName === 'drake' ? COLORS.BLUE : COLORS.RED,
+        backgroundColor: artistName.includes('drake') ? COLORS.BLUE : COLORS.RED,
         display: artistName.length ? 'flex' : 'none'
       }}
     >

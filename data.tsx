@@ -1,4 +1,5 @@
 import {
+  FormattedTrackData,
   PlaycountAPIResponse,
   SimplifiedArtistsTrack
 } from "./src/utils/Types";
@@ -1561,4 +1562,13 @@ export const drakeAlbumTrackData: SimplifiedArtistsTrack = {
   "episode": false,
   "track": true,
   "restrictions": [],
+}
+
+export const drakeArtistInfoTrackData: FormattedTrackData = {
+  "id": '1wFFFzJ5EsKbBWZriAcubN',
+  "name": 'Family Matters',
+  "artist": "drake",
+  "playcount": 46140910,
+  "preview_url": '',
+  "album_image_url": "https://i.scdn.co/image/ab67616d0000b273a0ac23f4b446a7264e67bf0e",
 }

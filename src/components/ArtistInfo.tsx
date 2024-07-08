@@ -17,7 +17,7 @@ const ArtistInfo = ({ track, hideImg }: ArtistInfoProps) => {
         className='img'
         style={{ display: artist.includes('kendrick') && hideImg ? 'none' : 'block' }}
       />
-      { artist.length &&
+      { artist.length > 0 &&
         <TrackInfo
           artistName={artist}
           trackAlbumImage={album_image_url}

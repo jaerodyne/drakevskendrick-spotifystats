@@ -13,6 +13,7 @@ describe('<Artistinfo />', () => {
       playcount: 0,
       hideImg: false
     }
+
     const { getByAltText } = render(<ArtistInfo {...defaultProps} />)
     const imageDrake = getByAltText('drake');
     const imageDrakeUrl = '/src/assets/img/drake.jpeg';
@@ -33,8 +34,7 @@ describe('<Artistinfo />', () => {
       hideImg: true
     }
     const { getByTestId } = render(<ArtistInfo {...trackInfoProps} />)
-    screen.debug()
-    
+
     expect(getByTestId(/track-info/)).toBeInTheDocument();
   })
 })

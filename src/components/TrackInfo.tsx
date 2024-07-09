@@ -11,7 +11,7 @@ const TrackInfo = ({ artistName, trackAlbumImage, trackName, playcount } : Track
         display: artistName.length ? 'flex' : 'none'
       }}
     >
-      <img src={trackAlbumImage} className="album-img" />
+      <img src={trackAlbumImage} className="album-img" alt="album-img" />
       <div className="track-description">
         <h2>{trackName}</h2>
         <h3>{artistName}</h3>

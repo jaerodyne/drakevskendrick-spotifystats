@@ -290,10 +290,10 @@ function App() {
                 },
               }
             ]}
-            onHighlightChange={(props) => {              
-              if (props && props.dataIndex) {
-                const track = formattedTracks[props.dataIndex]
-                console.log(track)
+            onHighlightChange={(props) => {   
+              if (props && Object.prototype.hasOwnProperty.call(props, 'dataIndex')) {
+                const track = formattedTracks[props.dataIndex!]
+
                 setCurrentTrack(track)
                 setHideImg(true)
               }
@@ -360,10 +360,9 @@ function App() {
             <ChartsTooltip
               trigger='item'
               slots={{
-                itemContent: (props) => {
+                itemContent: () => {
                   return CustomTooltip({
-                    currentTrack,
-                    points: props
+                    currentTrack
                   })
                 }
               }}

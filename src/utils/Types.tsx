@@ -1,4 +1,3 @@
-import { ChartsItemContentProps } from "@mui/x-charts";
 import { Track, SimplifiedArtist, SimplifiedAlbum } from "spotify-types";
 
 export interface PlaycountTrackInfo {
@@ -98,5 +97,4 @@ export interface PlaycountCounterProps {
 
 export interface TooltipProps {
   currentTrack: FormattedTrackData | undefined;
-  points: ChartsItemContentProps;
 }

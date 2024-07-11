@@ -1,6 +1,4 @@
-import { valueFormatter } from "../utils/BarChartStyles";
 import { TooltipProps } from "../utils/Types";
-valueFormatter
 
 const CustomTooltip = (props: TooltipProps) => {
   const { currentTrack } = props;

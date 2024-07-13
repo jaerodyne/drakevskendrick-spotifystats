@@ -13,6 +13,9 @@ import {
   ChartsGrid,
   ChartsLegend,
   ChartsTooltip,
+  AxisConfig,
+  ScaleName,
+  ChartsYAxisProps
 } from '@mui/x-charts';
 import { 
   assignColors,
@@ -288,6 +291,7 @@ function App() {
                   type: 'ordinal',
                   colors: assignColors(formattedTracks)
                 },
+                categoryGapRatio: 0.6,
               }
             ]}
             onHighlightChange={(props) => {   
@@ -337,14 +341,26 @@ function App() {
                 return '';
               }}
             />
-            <ChartsXAxis label='m = plays in millions*' valueFormatter={valueFormatter} />
-            <ChartsYAxis valueFormatter={trackNameFormatter} axisId='y-axis-id' />
-            <ChartsGrid vertical />
+            <ChartsXAxis
+              label='m = plays in millions*'
+              valueFormatter={valueFormatter}
+            />
+            <ChartsYAxis
+              // valueFormatter={trackNameFormatter} 
+              axisId='y-axis-id'
+              tickLabelStyle={{
+                baselineShift: 'baseline',
+                dominantBaseline: 'central',
+                textAnchor: 'start'
+              }}
+              tickLabelPlacement='tick'
+            />
+            {/* <ChartsGrid vertical /> */}
             <ChartsLegend
               direction='row'
               position={{
                 vertical: 'top',
-                horizontal: 'right'
+                horizontal: 'left'
               }}
               slotProps={{
                 legend: {

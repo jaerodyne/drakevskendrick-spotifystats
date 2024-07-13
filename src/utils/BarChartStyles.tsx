@@ -26,14 +26,15 @@ export const assignColors = (tracks: FormattedTrackData[]) => {
 }
 
 export const chartSetting = {
-  width: 700,
+  width: 680,
+  height: 600,
   margin: {
-    left: 200,
-    right: 20,
+    left: 20,
+    right: 200,
     top: 50,
     bottom: 50,
   },
- sx: {
+  sx: {
     padding: '1rem',
     // grid lines
     [`& .${chartsGridClasses.line}`]: {
@@ -46,7 +47,8 @@ export const chartSetting = {
       stroke: COLORS.OFF_WHITE
     },
     [`& .${axisClasses.tickContainer} .${axisClasses.tickLabel}`]: {
-      fill: COLORS.OFF_WHITE
+      fill: COLORS.OFF_WHITE,
+      transform: 'translateX(15px)'
     },
     [`& .${axisClasses.tickLabel} tspan`]: {
       fontSize: '1.1rem',
